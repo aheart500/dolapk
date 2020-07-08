@@ -52,44 +52,62 @@ const typeDefs = gql`
     waitingOrdersCount: Int!
     cancelledOrdersCount: Int!
     getOrder(id: ID!): Order
-    lastOrders(limit: Int!): [Order!]!
-    lastFinsiedOrders(limit: Int!): [Order!]!
-    lastWaitingOrders(limit: Int!): [Order!]!
-    lastCancelledOrders(limit: Int!): [Order!]!
-    scrollOrders(cursor: ID!, limit: Int!): [Order!]!
-    scrollFinishedOrders(cursor: ID!, limit: Int!): [Order!]!
-    scrollWaitingOrders(cursor: ID!, limit: Int!): [Order!]!
-    scrollCancelledOrders(cursor: ID!, limit: Int!): [Order!]!
+    lastOrders(limit: Int!, cursor: ID): [Order!]!
+    lastFinsiedOrders(limit: Int!, cursor: ID): [Order!]!
+    lastWaitingOrders(limit: Int!, cursor: ID): [Order!]!
+    lastCancelledOrders(limit: Int!, cursor: ID): [Order!]!
   }
 `;
 
 const resolvers = {
   Query: {
     allOrders: () => OrderModel.find({}).sort("-_id"),
-    lastOrders: async (root, args) =>
-      await OrderModel.find({}).limit(args.limit).sort("-_id"),
-    lastFinsiedOrders: async (root, args) =>
-      await OrderModel.find({ finished: true }).limit(args.limit).sort("-_id"),
-    lastWaitingOrders: async (root, args) =>
-      await OrderModel.find({ finished: false }).limit(args.limit).sort("-_id"),
-    lastCancelledOrders: async (root, args) =>
-      await OrderModel.find({ cancelled: true }).limit(args.limit).sort("-_id"),
-    scrollOrders: async (root, args) =>
-      await OrderModel.find({ _id: { $lt: args.cursor } })
+    lastOrders: async (root, args) => {
+      return await OrderModel.find(
+        args.cursor ? { _id: { $lt: args.cursor } } : {}
+      )
         .limit(args.limit)
-        .sort("-_id"),
-    scrollFinishedOrders: async (root, args) =>
-      await OrderModel.find({ _id: { $lt: args.cursor }, finished: true })
+        .sort("-_id");
+    },
+    lastFinsiedOrders: async (root, args) => {
+      return await OrderModel.find(
+        args.cursor
+          ? {
+              _id: { $lt: args.cursor },
+              finished: true,
+            }
+          : { finished: true }
+      )
         .limit(args.limit)
-        .sort("-_id"),
-    scrollWaitingOrders: async (root, args) =>
-      await OrderModel.find({ _id: { $lt: args.cursor }, finished: false })
+        .sort("-_id");
+    },
+
+    lastWaitingOrders: async (root, args) => {
+      return await OrderModel.find(
+        args.cursor
+          ? {
+              _id: { $lt: args.cursor },
+              finished: false,
+            }
+          : { finished: false }
+      )
         .limit(args.limit)
-        .sort("-_id"),
-    scrollCancelledOrders: async (root, args) =>
-      await OrderModel.find({ _id: { $lt: args.cursor }, cancelled: true })
+        .sort("-_id");
+    },
+
+    lastCancelledOrders: async (root, args) => {
+      return await OrderModel.find(
+        args.cursor
+          ? {
+              _id: { $lt: args.cursor },
+              cancelled: true,
+            }
+          : { cancelled: true }
+      )
         .limit(args.limit)
-        .sort("-_id"),
+        .sort("-_id");
+    },
+
     ordersCount: () => OrderModel.estimatedDocumentCount(),
     finishedOrders: () => OrderModel.find({ finished: true }).sort("-_id"),
     waitingOrders: () => OrderModel.find({ finished: false }).sort("-_id"),
