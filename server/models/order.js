@@ -13,5 +13,8 @@ const OrderSchema = mongoose.Schema({
   cancelled: { type: Boolean, default: false },
 });
 
+OrderSchema.index({ finished: -1 });
+OrderSchema.index({ cancelled: -1 });
+
 module.exports =
   mongoose.models.Order || new mongoose.model("Order", OrderSchema);
