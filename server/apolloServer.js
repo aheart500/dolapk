@@ -16,6 +16,8 @@ const typeDefs = gql`
     finished: Boolean!
     cancelled: Boolean!
     price: Float!
+    created_at: String
+    updated_at: String
   }
   type Mutation {
     addOrder(
@@ -79,7 +81,7 @@ const resolvers = {
           : { finished: true }
       )
         .limit(args.limit)
-        .sort("-_id");
+        .sort("-updated_at");
     },
 
     lastWaitingOrders: async (root, args) => {
@@ -92,7 +94,7 @@ const resolvers = {
           : { finished: false }
       )
         .limit(args.limit)
-        .sort("-_id");
+        .sort("-updated_at");
     },
 
     lastCancelledOrders: async (root, args) => {
@@ -105,7 +107,7 @@ const resolvers = {
           : { cancelled: true }
       )
         .limit(args.limit)
-        .sort("-_id");
+        .sort("-updated_at");
     },
 
     ordersCount: () => OrderModel.estimatedDocumentCount(),
