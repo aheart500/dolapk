@@ -1,0 +1,81 @@
+import Head from "next/head";
+import styles from "../../styles/login.module.css";
+import { TextField, Button } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
+import { useState, useContext, useEffect } from "react";
+import UserContext from "../../Contexts/User/UserContext";
+import { useRouter } from "next/router";
+const useStyles = makeStyles(() => ({
+  inputField: {
+    marginBottom: "1rem",
+  },
+}));
+
+export default function Login() {
+  const { userState, Login } = useContext(UserContext);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const classes = useStyles();
+  const router = useRouter();
+
+  const [pageLoading, setPageLoading] = useState(true);
+  useEffect(() => {
+    if (userState.isLoggedIn) {
+      router.replace("/admin");
+    }
+    setPageLoading(false);
+  }, [userState.isLoggedIn]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await Login(username, password);
+    } catch (e) {
+      if (e.graphQLErrors) setError(e.graphQLErrors[0].message);
+      console.log(e);
+    }
+  };
+  if (pageLoading) return <h1>Loading...</h1>;
+  return (
+    <div>
+      <Head>
+        <title>Login</title>
+      </Head>
+      <main className={styles.container}>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <TextField
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            label="Username"
+            className={classes.inputField}
+            required
+          />
+          <TextField
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={classes.inputField}
+            label="Password"
+            required
+          />
+          {error && (
+            <p
+              style={{
+                margin: "0.5rem 0",
+                color: "red",
+                fontSize: "1.2rem",
+              }}
+            >
+              {error}
+            </p>
+          )}
+          <Button variant="contained" type="submit">
+            Login
+          </Button>
+        </form>
+      </main>
+    </div>
+  );
+}
