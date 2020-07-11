@@ -7,7 +7,7 @@ import UserState from "../Contexts/User/UserState";
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: "http://localhost:3001/graphql",
+  uri: "http://dolapk.herokuapp.com/graphql",
 });
 
 const App = ({ Component, pageProps }) => {
