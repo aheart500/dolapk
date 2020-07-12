@@ -46,7 +46,6 @@ const Admin = () => {
         return <AdminMain />;
     }
   };
-  console.log(language);
   return pageLoading ? null : (
     <main>
       <Header

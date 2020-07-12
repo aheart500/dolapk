@@ -27,7 +27,7 @@ const typeDefs = gql`
   }
   type Order {
     id: ID!
-    trackID: Int!
+    trackID: Int
     customer: Customer!
     details: String!
     notes: String!
@@ -113,7 +113,7 @@ const orArrF = (search) => {
 const resolvers = {
   Query: {
     allOrders: () => OrderModel.find({}).sort("-_id"),
-    lastOrders: async (root, args) => {
+    lastOrders: async (root, args, c) => {
       const search = args.search ? new RegExp(args.search, "ig") : "";
       const orArr = orArrF(search);
       return await OrderModel.find(
@@ -195,7 +195,6 @@ const resolvers = {
     },
     login: async (root, args) => {
       const admin = await AdminModel.findOne({ username: args.username });
-
       if (!admin || !(await bcrypt.compare(args.password, admin.password)))
         throw new UserInputError("Wrong credentials", {
           invalidArgs: args,
