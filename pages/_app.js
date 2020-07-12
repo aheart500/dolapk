@@ -13,9 +13,9 @@ const dev = process.env.NODE_ENV === "development";
 /* const link = dev
   ? "http://localhost:3001/graphql"
   : "http://dolapk.herokuapp.com/graphql"; */
-const link = "http://dolapk.herokuapp.com/graphql";
 
 const App = ({ Component, pageProps }) => {
+  const link = "/graphql";
   const [token, setToken] = useState(null);
   const client = new ApolloClient({
     cache: new InMemoryCache(),

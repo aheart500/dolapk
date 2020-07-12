@@ -93,7 +93,12 @@ const typeDefs = gql`
     waitingOrdersCount: Int!
     cancelledOrdersCount: Int!
     getOrder(id: ID, trackID: Int): Order
-    lastOrders(limit: Int!, cursor: ID, search: String): [Order!]!
+    lastOrders(
+      limit: Int!
+      category: String
+      cursor: ID
+      search: String
+    ): [Order!]!
     lastFinsiedOrders(limit: Int!, cursor: ID, search: String): [Order!]!
     lastWaitingOrders(limit: Int!, cursor: ID, search: String): [Order!]!
     lastCancelledOrders(limit: Int!, cursor: ID, search: String): [Order!]!
@@ -116,11 +121,21 @@ const resolvers = {
     lastOrders: async (root, args, c) => {
       const search = args.search ? new RegExp(args.search, "ig") : "";
       const orArr = orArrF(search);
-      return await OrderModel.find(
-        args.cursor ? { _id: { $lt: args.cursor }, $or: orArr } : { $or: orArr }
-      )
-        .limit(args.limit)
-        .sort("-_id");
+      let query = args.category
+        ? args.category === "waiting"
+          ? { finished: false }
+          : { [args.category]: true }
+        : {};
+      if (args.cursor) {
+        query._id = { $lt: args.cursor };
+      }
+      if (args.search) {
+        query = {
+          ...query,
+          $or: orArr,
+        };
+      }
+      return await OrderModel.find(query).limit(args.limit).sort("-_id");
     },
     lastFinsiedOrders: async (root, args) => {
       const search = args.search ? new RegExp(args.search, "ig") : "";

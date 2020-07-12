@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import { gql } from "apollo-boost";
 
 export const GET_ORDER = gql`
   query getOrder($id: ID, $trackID: Int) {
@@ -43,8 +43,18 @@ export const ALL_ORDERS = gql`
 `;
 
 export const LAST_ORDERS = gql`
-  query lastOrders($limit: Int!, $cursor: ID, $search: String) {
-    lastOrders(limit: $limit, cursor: $cursor, search: $search) {
+  query lastOrders(
+    $limit: Int!
+    $cursor: ID
+    $search: String
+    $category: String
+  ) {
+    lastOrders(
+      limit: $limit
+      cursor: $cursor
+      search: $search
+      category: $category
+    ) {
       id
       customer {
         name

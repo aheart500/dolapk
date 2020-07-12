@@ -35,11 +35,11 @@ const Admin = () => {
       case "list-all":
         return <OrdersList list="all" />;
       case "list-wait":
-        return <OrdersList list="wait" />;
+        return <OrdersList list="waiting" />;
       case "list-finish":
-        return <OrdersList list="finish" />;
+        return <OrdersList list="finished" />;
       case "list-cancel":
-        return <OrdersList list="cancel" />;
+        return <OrdersList list="cancelled" />;
       case "add-order":
         return <OrderForm />;
       default:
