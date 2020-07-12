@@ -46,7 +46,6 @@ export default function Login() {
     } else {
       setPageLoading(false);
     }
-    setError(JSON.stringify(userState, null, 2));
   }, []);
 
   const handleSubmit = async (e) => {
