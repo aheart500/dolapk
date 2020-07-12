@@ -9,7 +9,16 @@
 .form {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background-color: rgb(128, 240, 231);
   padding: 1rem;
   border-radius: 10px;
+  width: 70%;
+  margin: auto;
+}
+@media (max-width: 500) {
+  .form {
+    width: 100%;
+  }
 }

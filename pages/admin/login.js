@@ -6,14 +6,28 @@ import { useState, useContext, useEffect } from "react";
 import UserContext from "../../Contexts/User/UserContext";
 import { useRouter } from "next/router";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgb(128, 240, 231)",
+    padding: "1rem",
+    borderRadius: "10px",
+    width: "50%",
+    margin: "auto",
+    [theme.breakpoints.down("sm")]: {
+      width: "90%",
+    },
+  },
   inputField: {
     marginBottom: "1rem",
-    width: "40rem",
+    width: "90%",
   },
   button: {
     alignSelf: "center",
-    width: "15rem",
+    width: "50%",
   },
 }));
 
@@ -32,6 +46,7 @@ export default function Login() {
     } else {
       setPageLoading(false);
     }
+    setError(JSON.stringify(userState, null, 2));
   }, []);
 
   const handleSubmit = async (e) => {
@@ -45,7 +60,6 @@ export default function Login() {
       console.log(e);
     }
   };
-
   if (pageLoading) return null;
 
   return (
@@ -54,7 +68,7 @@ export default function Login() {
         <title>Login</title>
       </Head>
       <main className={styles.container}>
-        <form onSubmit={handleSubmit} className={styles.form}>
+        <form onSubmit={handleSubmit} className={classes.form}>
           <TextField
             type="text"
             value={username}
@@ -79,7 +93,7 @@ export default function Login() {
                 fontSize: "1.2rem",
               }}
             >
-              {error}
+              {JSON.stringify(error, null, 2)}
             </p>
           )}
           <Button variant="contained" className={classes.button} type="submit">

@@ -1,7 +1,6 @@
 import UserContext from "./UserContext";
 import UserReducer from "./UserReducer";
 import React, { useReducer, useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import { LOGIN } from "../../GraphQL";
 import { useMutation } from "@apollo/react-hooks";
 import Loader from "../../components/Loader";
@@ -16,7 +15,8 @@ export default function UserState({ children }) {
   const [state, dispatch] = useReducer(UserReducer, initialState);
 
   useEffect(() => {
-    const loggedUser = Cookies.getJSON("loggedUser");
+    let loggedUser = localStorage.getItem("loggedUser");
+    if (loggedUser) loggedUser = JSON.parse(loggedUser);
     if (loggedUser && loggedUser.name) {
       dispatch({
         type: "LOGIN",
@@ -32,14 +32,17 @@ export default function UserState({ children }) {
     return GraphLogin({ variables: { username, password } }).then(
       ({ data }) => {
         const { name, value: token, img } = data.login;
-        Cookies.set("loggedUser", { name, token, img }, { sameSite: "Lax" });
+        localStorage.setItem(
+          "loggedUser",
+          JSON.stringify({ name, token, img })
+        );
         dispatch({ type: "LOGIN", name, token, img });
       }
     );
   };
 
   const Logout = () => {
-    Cookies.remove("loggedUser");
+    localStorage.clear();
     dispatch({ type: "LOGOUT" });
   };
 

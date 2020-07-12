@@ -7,8 +7,10 @@ import Drawer from "../../components/Drawer";
 import AdminMain from "../../components/AdminMain";
 import OrdersList from "../../components/OrdersList";
 import OrderForm from "../../components/OrderForm";
+
 const Admin = () => {
   const { userState, Logout } = useContext(UserContext);
+
   const [open, setOpen] = useState(false);
   const [tap, setTap] = useState("main");
   const {
@@ -62,6 +64,7 @@ const Admin = () => {
         lang={language}
         changeLang={changeLang}
       />
+
       {renderedTap()}
     </main>
   );
