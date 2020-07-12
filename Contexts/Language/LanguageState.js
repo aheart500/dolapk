@@ -1,20 +1,20 @@
 import LanguageContext from "./LanguageContext";
 import LanguageReducer from "./LanguageReducer";
 import { useReducer, useEffect } from "react";
-import Cookies from "js-cookie";
 const LanguageState = ({ children }) => {
   const initialState = {
     language: "en",
   };
   const [state, dispatch] = useReducer(LanguageReducer, initialState);
   useEffect(() => {
-    const language = Cookies.getJSON("language");
+    let language = localStorage.getItem("language");
+    if (language) language = JSON.parse(language);
     if (language && language.lang !== "en") {
       dispatch({ type: language.lang });
     }
   }, []);
   const changeLang = (lang) => {
-    Cookies.set("language", { lang }, { sameSite: "Lax" });
+    localStorage.setItem("language", JSON.stringify({ lang }));
     dispatch({ type: lang });
   };
   return (
