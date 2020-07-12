@@ -55,8 +55,9 @@ export default function Login() {
       await Login(username, password);
       router.replace("/admin");
     } catch (e) {
-      if (e.graphQLErrors) setError(e.graphQLErrors[0].message);
-      console.log(e);
+      /* if (e.graphQLErrors) setError(e.graphQLErrors[0].message);
+      console.log(e); */
+      setError(e);
     }
   };
   if (pageLoading) return null;
