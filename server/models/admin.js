@@ -4,6 +4,7 @@ const AdminSchema = mongoose.Schema({
   username: String,
   password: String,
   name: String,
+  img: String,
 });
 
 module.exports =

@@ -4,7 +4,7 @@ import React, { useReducer, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { LOGIN } from "../../GraphQL";
 import { useMutation } from "@apollo/react-hooks";
-
+import Loader from "../../components/Loader";
 export default function UserState({ children }) {
   const [loading, setLoading] = useState(true);
   const [GraphLogin] = useMutation(LOGIN);
@@ -22,6 +22,7 @@ export default function UserState({ children }) {
         type: "LOGIN",
         name: loggedUser.name,
         token: loggedUser.token,
+        img: loggedUser.img,
       });
     }
     setLoading(false);
@@ -30,14 +31,9 @@ export default function UserState({ children }) {
   const Login = (username, password) => {
     return GraphLogin({ variables: { username, password } }).then(
       ({ data }) => {
-        console.log(data);
-        const { name, value: token } = data.login;
-        Cookies.set(
-          "loggedUser",
-          { name, token },
-          { sameSite: "None", secure: true }
-        );
-        dispatch({ type: "LOGIN", name, token });
+        const { name, value: token, img } = data.login;
+        Cookies.set("loggedUser", { name, token, img }, { sameSite: "Lax" });
+        dispatch({ type: "LOGIN", name, token, img });
       }
     );
   };
@@ -55,7 +51,7 @@ export default function UserState({ children }) {
         Logout,
       }}
     >
-      {loading ? <h1>Loading...</h1> : children}
+      {loading ? <Loader /> : children}
     </UserContext.Provider>
   );
 }

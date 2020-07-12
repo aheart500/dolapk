@@ -13,10 +13,12 @@ const typeDefs = gql`
     name: String!
     username: String!
     password: String!
+    img: String
   }
   type Token {
     value: String!
     name: String!
+    img: String
   }
   type Customer {
     name: String!
@@ -39,7 +41,12 @@ const typeDefs = gql`
     updated_by: String
   }
   type Mutation {
-    createAdmin(username: String!, password: String!, name: String!): Admin
+    createAdmin(
+      username: String!
+      password: String!
+      name: String!
+      img: String
+    ): Admin
     login(username: String!, password: String!): Token
     addOrder(
       customer_name: String!
@@ -182,6 +189,7 @@ const resolvers = {
         username: args.username,
         password,
         name: args.name,
+        img: args.img ? args.img : null,
       });
       return admin.save();
     },
@@ -197,7 +205,11 @@ const resolvers = {
         username: admin.username,
         id: admin._id,
       };
-      return { value: jwt.sign(adminForToken, SECRET), name: admin.name };
+      return {
+        value: jwt.sign(adminForToken, SECRET),
+        name: admin.name,
+        img: admin.img ? admin.img : null,
+      };
     },
     addOrder: (root, args) => {
       const newOrder = new OrderModel({

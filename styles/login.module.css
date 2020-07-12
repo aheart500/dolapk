@@ -4,6 +4,7 @@
   height: 100vh;
   justify-content: center;
   align-items: center;
+  background-color: lightgray;
 }
 .form {
   display: flex;

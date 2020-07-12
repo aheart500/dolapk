@@ -5,9 +5,15 @@ import { makeStyles } from "@material-ui/styles";
 import { useState, useContext, useEffect } from "react";
 import UserContext from "../../Contexts/User/UserContext";
 import { useRouter } from "next/router";
+
 const useStyles = makeStyles(() => ({
   inputField: {
     marginBottom: "1rem",
+    width: "40rem",
+  },
+  button: {
+    alignSelf: "center",
+    width: "15rem",
   },
 }));
 
@@ -23,20 +29,25 @@ export default function Login() {
   useEffect(() => {
     if (userState.isLoggedIn) {
       router.replace("/admin");
+    } else {
+      setPageLoading(false);
     }
-    setPageLoading(false);
-  }, [userState.isLoggedIn]);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     try {
       await Login(username, password);
+      router.replace("/admin");
     } catch (e) {
       if (e.graphQLErrors) setError(e.graphQLErrors[0].message);
       console.log(e);
     }
   };
-  if (pageLoading) return <h1>Loading...</h1>;
+
+  if (pageLoading) return null;
+
   return (
     <div>
       <Head>
@@ -71,7 +82,7 @@ export default function Login() {
               {error}
             </p>
           )}
-          <Button variant="contained" type="submit">
+          <Button variant="contained" className={classes.button} type="submit">
             Login
           </Button>
         </form>
