@@ -36,6 +36,7 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [logging, setLogging] = useState(false);
   const classes = useStyles();
   const router = useRouter();
 
@@ -51,13 +52,15 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLogging(true);
     try {
       await Login(username, password);
       router.replace("/admin");
     } catch (e) {
-      /* if (e.graphQLErrors) setError(e.graphQLErrors[0].message);
-      console.log(e); */
-      setError(e);
+      if (e.graphQLErrors) setError(e.graphQLErrors[0].message);
+      console.log(e);
+
+      setLogging(false);
     }
   };
   if (pageLoading) return null;
@@ -93,10 +96,15 @@ export default function Login() {
                 fontSize: "1.2rem",
               }}
             >
-              {JSON.stringify(error, null, 2)}
+              {error}
             </p>
           )}
-          <Button variant="contained" className={classes.button} type="submit">
+          <Button
+            variant="contained"
+            disabled={logging}
+            className={classes.button}
+            type="submit"
+          >
             Login
           </Button>
         </form>
