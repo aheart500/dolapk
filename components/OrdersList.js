@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
+import ReactToPrint from "react-to-print";
 import Loader from "./Loader";
 import {
   LAST_ORDERS,
@@ -38,6 +39,8 @@ import {
   Search,
 } from "@material-ui/icons";
 import { Button } from "@material-ui/core";
+import PrintCards from "./PrintCards";
+import PrintTable from "./PrintTable";
 
 const tableHeads = [
   "ID",
@@ -64,6 +67,9 @@ const useStyles = makeStyles((theme) => ({
     margin: "0.5rem",
     direction: "rtl",
     display: "flex",
+  },
+  table: {
+    direction: "rtl",
   },
   tableContainer: {
     width: "95%",
@@ -146,6 +152,8 @@ const OrdersList = ({ list, showOrder, setOrder }) => {
   const [deleteOrders] = useMutation(DELETE_ORDERS);
 
   const classes = useStyles();
+  const printCards = useRef();
+  const printTable = useRef();
 
   useEffect(() => {
     if (data) setOrders(data.lastOrders);
@@ -250,10 +258,12 @@ const OrdersList = ({ list, showOrder, setOrder }) => {
             الطلبات
           </Typography>
         )}
+
         <>
           <Button onClick={() => loadMore()} variant="contained">
             تحميل المزيد
           </Button>
+
           <Button
             onClick={() => refetch()}
             variant="contained"
@@ -261,6 +271,24 @@ const OrdersList = ({ list, showOrder, setOrder }) => {
           >
             إعادة التحميل
           </Button>
+          <ReactToPrint
+            trigger={() => (
+              <Button variant="contained" style={{ margin: "0.5rem" }}>
+                طباعة جدول
+              </Button>
+            )}
+            content={() => printTable.current}
+            pageStyle="@page { size: auto;  margin: 1rem;} @media print { body { -webkit-print-color-adjust: exact; } }"
+          />
+          <ReactToPrint
+            trigger={() => (
+              <Button variant="contained" style={{ margin: "0.5rem" }}>
+                طباعة كروت
+              </Button>
+            )}
+            content={() => printCards.current}
+            pageStyle="@page { size: auto;  margin: 1rem;} @media print { body { -webkit-print-color-adjust: exact; } }"
+          />
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <Search />
@@ -327,7 +355,7 @@ const OrdersList = ({ list, showOrder, setOrder }) => {
         )}
       </Toolbar>
       <div className={classes.tableContainer}>
-        <Table className={classes.table} style={{ direction: "rtl" }}>
+        <Table className={classes.table}>
           <TableHead>
             <TableRow>
               <TableCell padding="checkbox">
@@ -391,9 +419,15 @@ const OrdersList = ({ list, showOrder, setOrder }) => {
                   </TableCell>
                   <TableCell align="right">{order.customer.name}</TableCell>
                   <TableCell align="right">{order.customer.phone}</TableCell>
-                  <TableCell align="right">{order.customer.address}</TableCell>
-                  <TableCell align="right">{order.details}</TableCell>
-                  <TableCell align="right">{order.notes}</TableCell>
+                  <TableCell align="right" style={{ width: "20rem" }}>
+                    {order.customer.address}
+                  </TableCell>
+                  <TableCell align="right" style={{ width: "40rem" }}>
+                    {order.details}
+                  </TableCell>
+                  <TableCell align="right" style={{ width: "30rem" }}>
+                    {order.notes}
+                  </TableCell>
                   <TableCell align="right">{`${order.price}$`}</TableCell>
 
                   <TableCell align="right">
@@ -448,6 +482,14 @@ const OrdersList = ({ list, showOrder, setOrder }) => {
           </TableBody>
         </Table>
       </div>
+      <PrintCards
+        ref={printCards}
+        orders={orders.filter((order) => selected.includes(order.id))}
+      />
+      <PrintTable
+        ref={printTable}
+        orders={orders.filter((order) => selected.includes(order.id))}
+      />
     </div>
   );
 };

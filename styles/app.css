@@ -54,3 +54,69 @@ body {
     align-items: center;
   }
 }
+
+.cards-container {
+  display: flex !important;
+  flex-direction: row !important;
+  direction: rtl;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  font-family: "Cairo";
+  page-break-inside: avoid;
+  width: 100% !important;
+  break-inside: avoid;
+  break-inside: avoid-page;
+}
+.card {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  border: 1px solid black;
+  margin: 0.5rem !important;
+  padding: 10px;
+  background-image: url("/splash.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 80%;
+  page-break-inside: avoid;
+  break-inside: avoid;
+  break-inside: avoid-page;
+}
+.track-id {
+  margin: 0 3rem;
+  display: flex;
+  flex-direction: row;
+
+  width: 80%;
+}
+.track-id .track {
+  margin: 0 1rem;
+}
+@media print {
+  .card {
+    break-inside: avoid;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+}
+/* .card:nth-child(10) {
+  margin-bottom: 6rem;
+}
+.card:nth-child(9) {
+  margin-bottom: 6rem;
+}
+.card:nth-child(19) {
+  margin-bottom: 6rem;
+}
+.card:nth-child(20) {
+  margin-bottom: 6rem;
+} */
+.card-row {
+  display: flex;
+  flex-direction: row;
+}
+.card-right {
+  width: 20%;
+  margin-left: 0.5rem;
+}
