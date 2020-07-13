@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
+import Loader from "./Loader";
 import {
   LAST_ORDERS,
   FINISH_ORDERS,
@@ -226,7 +227,7 @@ const OrdersList = ({ list, showOrder, setOrder }) => {
     }
   };
 
-  if (!data) return <h1>Loading</h1>;
+  if (!data) return <Loader />;
   return (
     <div>
       <Toolbar className="toolbar-custom">
