@@ -1,0 +1,37 @@
+.orderContainer {
+  width: 70%;
+  margin: 2rem auto;
+  direction: rtl;
+  font-family: "Cairo";
+  font-size: 1.2rem;
+}
+.row {
+  display: flex;
+  flex-direction: row;
+  background-color: palegreen;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+  align-items: center;
+}
+.textBoxContainer {
+  width: 70%;
+}
+.right {
+  width: 20%;
+}
+
+@media (max-width: 500px) {
+  .orderContainer {
+    width: 95%;
+  }
+  .row {
+    flex-direction: column;
+  }
+  .right {
+    width: 100%;
+  }
+  .textBoxContainer {
+    width: 90%;
+  }
+}

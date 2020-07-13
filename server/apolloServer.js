@@ -54,7 +54,6 @@ const typeDefs = gql`
       customer_address: String!
       details: String!
       notes: String
-      created_by: String!
       price: Float!
     ): Order
     editOrder(
@@ -65,7 +64,6 @@ const typeDefs = gql`
       details: String!
       notes: String
       price: Float!
-      updated_by: String!
     ): Order
     finishOrder(id: ID, trackID: Int): String
     shipOrder(id: ID!): String
@@ -225,7 +223,8 @@ const resolvers = {
         img: admin.img ? admin.img : null,
       };
     },
-    addOrder: (root, args) => {
+    addOrder: (root, args, c) => {
+      if (!c.currentAdmin) throw new AuthenticationError("Not Authinticated");
       const newOrder = new OrderModel({
         id: Math.floor(Math.random() * 100),
         finished: false,
@@ -238,11 +237,12 @@ const resolvers = {
         },
         details: args.details,
         price: args.price,
-        created_by: args.created_by,
+        created_by: c.currentAdmin.name,
       });
       return newOrder.save();
     },
-    editOrder: async (root, args) => {
+    editOrder: async (root, args, c) => {
+      if (!c.currentAdmin) throw new AuthenticationError("Not Authinticated");
       const order = await OrderModel.findByIdAndUpdate(
         args.id,
         {
@@ -254,7 +254,7 @@ const resolvers = {
           },
           details: args.details,
           price: args.price,
-          updated_by: args.updated_by,
+          updated_by: c.currentAdmin.name,
         },
         { new: true }
       );

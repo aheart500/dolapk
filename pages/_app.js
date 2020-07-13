@@ -8,11 +8,6 @@ import LanguageState from "../Contexts/Language/LanguageState";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "../styles/theme";
-const dev = process.env.NODE_ENV === "development";
-
-/* const link = dev
-  ? "http://localhost:3001/graphql"
-  : "http://dolapk.herokuapp.com/graphql"; */
 
 const App = ({ Component, pageProps }) => {
   const link = "/graphql";

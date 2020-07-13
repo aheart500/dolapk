@@ -1,22 +1,24 @@
 import { gql } from "apollo-boost";
 
 export const GET_ORDER = gql`
-  query getOrder($id: ID, $trackID: Int) {
-    id
-    customer {
-      name
-      phone
-      address
+  query order($id: ID, $trackID: Int) {
+    getOrder(id: $id, trackID: $trackID) {
+      id
+      customer {
+        name
+        phone
+        address
+      }
+      details
+      notes
+      price
+      finished
+      cancelled
+      shipped
+      trackID
+      created_by
+      updated_by
     }
-    details
-    notes
-    price
-    finished
-    cancelled
-    shipped
-    trackID
-    created_by
-    updated_by
   }
 `;
 
@@ -174,7 +176,6 @@ export const ADD_ORDER = gql`
     $details: String!
     $notes: String
     $price: Float!
-    $created_by: String!
   ) {
     addOrder(
       customer_name: $customer_name
@@ -183,7 +184,6 @@ export const ADD_ORDER = gql`
       details: $details
       notes: $notes
       price: $price
-      created_by: $created_by
     ) {
       id
     }
@@ -199,7 +199,6 @@ export const EDIT_ORDER = gql`
     $details: String!
     $notes: String
     $price: Float!
-    $updated_by: String!
   ) {
     editOrder(
       id: $id
@@ -209,7 +208,6 @@ export const EDIT_ORDER = gql`
       details: $details
       notes: $notes
       price: $price
-      updated_by: $updated_by
     ) {
       id
       customer {
@@ -230,37 +228,37 @@ export const EDIT_ORDER = gql`
   }
 `;
 
-const FINISH_ORDERS = gql`
+export const FINISH_ORDERS = gql`
   mutation finishOrders($ids: [ID!]!) {
     finishOrders(ids: $ids)
   }
 `;
-const UNFINISH_ORDERS = gql`
+export const UNFINISH_ORDERS = gql`
   mutation unFinishOrders($ids: [ID!]!) {
     unFinishOrders(ids: $ids)
   }
 `;
-const CANCEL_ORDERS = gql`
+export const CANCEL_ORDERS = gql`
   mutation cancelOrders($ids: [ID!]!) {
     cancelOrders(ids: $ids)
   }
 `;
-const UNCANCEL_ORDERS = gql`
+export const UNCANCEL_ORDERS = gql`
   mutation unCancelOrders($ids: [ID!]!) {
     unCancelOrders(ids: $ids)
   }
 `;
-const SHIP_ORDERS = gql`
+export const SHIP_ORDERS = gql`
   mutation shipOrders($ids: [ID!]!) {
     shipOrders(ids: $ids)
   }
 `;
-const UNSHIP_ORDERS = gql`
+export const UNSHIP_ORDERS = gql`
   mutation unShipOrders($ids: [ID!]!) {
     unShipOrders(ids: $ids)
   }
 `;
-const DELETE_ORDERS = gql`
+export const DELETE_ORDERS = gql`
   mutation deleteOrders($ids: [ID!]!) {
     deleteOrders(ids: $ids)
   }
