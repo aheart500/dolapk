@@ -18,6 +18,21 @@ export const GET_ORDER = gql`
       trackID
       created_by
       updated_by
+      created_at
+      updated_at
+    }
+  }
+`;
+export const GET_ORDER_SENSETIVE = gql`
+  query order($id: ID, $trackID: Int) {
+    getOrder(id: $id, trackID: $trackID) {
+      details
+      notes
+      price
+      finished
+      cancelled
+      shipped
+      trackID
     }
   }
 `;
@@ -40,6 +55,8 @@ export const ALL_ORDERS = gql`
       trackID
       created_by
       updated_by
+      created_at
+      updated_at
     }
   }
 `;
@@ -72,6 +89,8 @@ export const LAST_ORDERS = gql`
       trackID
       created_by
       updated_by
+      created_at
+      updated_at
     }
   }
 `;

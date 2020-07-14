@@ -73,6 +73,13 @@ const Order = ({ orderId, editOrder, backToList, setSelectedOrderId }) => {
         ? `000${formedID}`
         : formedID;
     formedID = `DP${formedID}`;
+
+    const createdAt = new Date(parseInt(order.created_at))
+      .toString()
+      .replace("GMT+0200 (Eastern European Standard Time)", "");
+    const updatedAt = new Date(parseInt(order.updated_at))
+      .toString()
+      .replace("GMT+0200 (Eastern European Standard Time)", "");
     return (
       <div className={styles.orderContainer}>
         <Button variant="outlined" onClick={() => backToList()}>
@@ -173,8 +180,18 @@ const Order = ({ orderId, editOrder, backToList, setSelectedOrderId }) => {
           <div>{order.created_by}</div>
         </div>
         <div className={styles.row}>
+          <div className={styles.right}>تاريخ التسجيل</div>
+          <div style={{ direction: "ltr" }}>{createdAt}</div>
+        </div>
+        <div className={styles.row}>
           <div className={styles.right}>مُعَّدِل الطلب</div>
-          <div>{order.updated_by}</div>
+          <div>{order.updated_by ? order.updated_by : "لم يتم التعديل"}</div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.right}>تاريخ التعديل</div>
+          <div style={{ direction: "ltr" }}>
+            {order.updated_by ? updatedAt : ""}
+          </div>
         </div>
         <div
           style={{

@@ -31,7 +31,25 @@ app.all("*", (req, res) => {
 });
 NextApp.prepare().then(() => {
   const server = createServer(app);
+  const io = require("socket.io")(server);
+  let onlineUsers = [];
 
+  io.on("connect", (socket) => {
+    let name = "";
+    socket.on("logged", (args) => {
+      name = args.name;
+      onlineUsers.push(args.name);
+      io.emit("users", {
+        onlineUsers,
+      });
+    });
+    socket.on("disconnect", () => {
+      onlineUsers = onlineUsers.filter((user) => user !== name);
+      io.emit("users", {
+        onlineUsers,
+      });
+    });
+  });
   server.listen(PORT, (err) => {
     if (err) throw err;
     console.log("Server is listening on " + PORT);

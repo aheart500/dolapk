@@ -9,32 +9,45 @@ import OrdersList from "../../components/OrdersList";
 import AddOrder from "../../components/AddOrder";
 import EditOrder from "../../components/EditOrder";
 import Order from "../../components/Order";
-
+import io from "socket.io-client";
 const Admin = () => {
   const { userState, Logout } = useContext(UserContext);
   const [selectedOrderId, setSelectedOrderId] = useState("");
   const [editOrder, setEditOrder] = useState({});
   const [open, setOpen] = useState(false);
-  const [tap, setTap] = useState("list-all");
+  const [tap, setTap] = useState("main");
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const {
     languageState: { language },
     changeLang,
   } = useContext(LanguageContext);
   const router = useRouter();
   const [pageLoading, setPageLoading] = useState(true);
-
+  const socket = io();
   useEffect(() => {
     if (!userState.isLoggedIn) {
       router.replace("/admin/login");
     } else {
       setPageLoading(false);
+
+      socket.emit("logged", {
+        name: userState.name,
+      });
+      socket.on("users", (data) => {
+        setOnlineUsers(data.onlineUsers);
+      });
     }
   }, []);
 
   const renderedTap = () => {
     switch (tap) {
       case "main":
-        return <AdminMain />;
+        return (
+          <AdminMain
+            users={onlineUsers.filter((user) => user !== userState.name)}
+            name={userState.name}
+          />
+        );
       case "list-all":
         return (
           <OrdersList

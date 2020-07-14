@@ -350,7 +350,7 @@ const server = new ApolloServer({
     if (auth && auth.toLowerCase().startsWith("bearer ")) {
       const decodedToken = jwt.verify(auth.substring(7), SECRET);
       const currentAdmin = await AdminModel.findById(decodedToken.id);
-      console.log(currentAdmin);
+
       return { currentAdmin };
     }
   },
