@@ -25,6 +25,10 @@ const Header = ({ openDrawer, name, img }) => {
   return (
     <AppBar position="static">
       <Toolbar>
+        <Avatar src={img} alt={name} className={classes.avatar} />
+        <Typography variant="h6" className={classes.title}>
+          {name}
+        </Typography>
         <IconButton
           edge="start"
           className={classes.menuButton}
@@ -34,10 +38,6 @@ const Header = ({ openDrawer, name, img }) => {
         >
           <MenuIcon />
         </IconButton>
-        <Avatar src={img} alt={name} className={classes.avatar} />
-        <Typography variant="h6" className={classes.title}>
-          {name}
-        </Typography>
       </Toolbar>
     </AppBar>
   );

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import ReactToPrint from "react-to-print";
 import Loader from "./Loader";
+import PostAddIcon from "@material-ui/icons/PostAdd";
 import {
   LAST_ORDERS,
   FINISH_ORDERS,
@@ -136,7 +137,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrdersList = ({ list, showOrder, setOrder }) => {
+const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
   const [orders, setOrders] = useState([]);
   const [selected, setSelected] = useState([]);
   const [search, setSearch] = useState("");
@@ -258,7 +259,19 @@ const OrdersList = ({ list, showOrder, setOrder }) => {
             الطلبات
           </Typography>
         )}
-
+        <Button
+          color="primary"
+          variant="contained"
+          size="large"
+          style={{
+            marginLeft: "auto",
+            width: "20%",
+          }}
+          onClick={() => addOrder()}
+          endIcon={<PostAddIcon />}
+        >
+          أضف طلب جديد
+        </Button>
         <>
           <Button onClick={() => loadMore()} variant="contained">
             تحميل المزيد
@@ -273,7 +286,12 @@ const OrdersList = ({ list, showOrder, setOrder }) => {
           </Button>
           <ReactToPrint
             trigger={() => (
-              <Button variant="contained" style={{ margin: "0.5rem" }}>
+              <Button
+                variant="contained"
+                style={{ margin: "0.5rem" }}
+                color="primary"
+                disabled={numSelected < 1}
+              >
                 طباعة جدول
               </Button>
             )}
@@ -282,7 +300,12 @@ const OrdersList = ({ list, showOrder, setOrder }) => {
           />
           <ReactToPrint
             trigger={() => (
-              <Button variant="contained" style={{ margin: "0.5rem" }}>
+              <Button
+                variant="contained"
+                style={{ margin: "0.5rem" }}
+                color="secondary"
+                disabled={numSelected < 1}
+              >
                 طباعة كروت
               </Button>
             )}
@@ -355,7 +378,7 @@ const OrdersList = ({ list, showOrder, setOrder }) => {
         )}
       </Toolbar>
       <div className={classes.tableContainer}>
-        <Table className={classes.table}>
+        <Table className={classes.table} size="small">
           <TableHead>
             <TableRow>
               <TableCell padding="checkbox">
@@ -398,6 +421,15 @@ const OrdersList = ({ list, showOrder, setOrder }) => {
                   aria-checked={isItemSelected}
                   tabIndex={-1}
                   selected={isItemSelected}
+                  style={{
+                    backgroundColor: order.finished
+                      ? "lightgreen"
+                      : order.cancelled
+                      ? "rgb(221, 115, 115)"
+                      : isItemSelected
+                      ? "rgba(245, 0, 87, 0.08)"
+                      : "inherit",
+                  }}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox

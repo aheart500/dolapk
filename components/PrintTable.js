@@ -16,10 +16,14 @@ class PrintTable extends Component {
     const orders = this.props.orders;
     if (orders.length === 0) return null;
     return (
-      <TableContainer component={Paper}>
-        <Table aria-label="simple table" style={{ direction: "rtl" }}>
+      <TableContainer component={Paper} className="printTable">
+        <Table
+          size="small"
+          aria-label="simple table"
+          style={{ direction: "rtl", fontSize: "0.8rem" }}
+        >
           <TableHead>
-            <TableRow>
+            <TableRow dens>
               <TableCell>الطلب</TableCell>
               <TableCell>الأسم</TableCell>
               <TableCell align="right">الهاتف</TableCell>

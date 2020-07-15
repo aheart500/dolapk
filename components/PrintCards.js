@@ -9,7 +9,7 @@ class PrintCards extends Component {
     const orders = this.props.orders;
 
     return (
-      <Container className="cards-container" maxWidth="lg">
+      <Container className="cards-container printCards" maxWidth="lg">
         {orders.map((order, i) => {
           let formedID = `${order.trackID}`;
           formedID =

@@ -64,11 +64,9 @@ body {
   font-family: "Cairo";
   page-break-inside: avoid;
   width: 100% !important;
-  break-inside: avoid;
-  break-inside: avoid-page;
 }
 .card {
-  width: 45%;
+  width: 48%;
   display: flex;
   flex-direction: column;
   border-radius: 10px;
@@ -79,27 +77,9 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 80%;
-  page-break-inside: avoid;
-  break-inside: avoid;
-  break-inside: avoid-page;
+  float: left;
 }
-.track-id {
-  margin: 0 3rem;
-  display: flex;
-  flex-direction: row;
 
-  width: 80%;
-}
-.track-id .track {
-  margin: 0 1rem;
-}
-@media print {
-  .card {
-    break-inside: avoid;
-    break-inside: avoid-page;
-    page-break-inside: avoid;
-  }
-}
 /* .card:nth-child(10) {
   margin-bottom: 6rem;
 }
@@ -119,4 +99,20 @@ body {
 .card-right {
   width: 20%;
   margin-left: 0.5rem;
+}
+
+.printTable {
+  display: none;
+}
+.printCards {
+  display: none !important;
+}
+
+@media print {
+  .printTable {
+    display: block !important;
+  }
+  .printCards {
+    display: block !important;
+  }
 }

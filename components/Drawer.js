@@ -19,6 +19,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
+import HomeOutlined from "@material-ui/icons/HomeOutlined";
 const useStyle = makeStyles((theme) => ({
   list: {
     width: 250,
@@ -56,6 +57,7 @@ const Drawer_ = ({
   };
   const handleClick = (tapName) => {
     hide();
+    setShowOrdersLists(false);
     setTap(tapName);
   };
   const handleLogout = () => {
@@ -71,12 +73,19 @@ const Drawer_ = ({
             {name}
           </Typography>
           <List className={classes.list}>
+            <ListItem button onClick={() => handleClick("main")}>
+              <ListItemIcon>
+                <HomeOutlined />
+              </ListItemIcon>
+              <ListItemText>Home</ListItemText>
+            </ListItem>
             <ListItem button onClick={() => handleClick("order-form-add")}>
               <ListItemIcon>
                 <PostAddIcon />
               </ListItemIcon>
               <ListItemText>Add order</ListItemText>
             </ListItem>
+
             <ListItem
               button
               onClick={() => setShowOrdersLists(!showOrdersLists)}

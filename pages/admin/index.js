@@ -53,6 +53,7 @@ const Admin = () => {
           <OrdersList
             list="all"
             showOrder={() => setTap("order")}
+            addOrder={() => setTap("order-form-add")}
             setOrder={setSelectedOrderId}
           />
         );
@@ -61,6 +62,7 @@ const Admin = () => {
           <OrdersList
             list="waiting"
             showOrder={() => setTap("order")}
+            addOrder={() => setTap("order-form-add")}
             setOrder={setSelectedOrderId}
           />
         );
@@ -69,6 +71,7 @@ const Admin = () => {
           <OrdersList
             list="finished"
             showOrder={() => setTap("order")}
+            addOrder={() => setTap("order-form-add")}
             setOrder={setSelectedOrderId}
           />
         );
@@ -76,6 +79,7 @@ const Admin = () => {
         return (
           <OrdersList
             list="cancelled"
+            addOrder={() => setTap("order-form-add")}
             showOrder={() => setTap("order")}
             setOrder={setSelectedOrderId}
           />
