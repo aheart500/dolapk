@@ -47,7 +47,17 @@ class PrintCards extends Component {
               </div>
               <div className="card-row">
                 <div className="card-right">السعر</div>
-                <div>{`${order.price}$`}</div>
+                <div dir="ltr">{`${order.price} EGP`}</div>
+                <div
+                  style={{
+                    marginRight: "auto",
+                    marginLeft: "1rem",
+                    fontSize: "1.2rem",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Dolapk
+                </div>
               </div>
             </div>
           );

@@ -114,7 +114,7 @@ const Order = ({ orderId, editOrder, backToList, setSelectedOrderId }) => {
         </div>
         <div className={styles.row}>
           <div className={styles.right}>السعر</div>
-          <div>{`$${order.price}`}</div>
+          <div dir="ltr">{`${order.price} EGP`}</div>
         </div>
         <div className={styles.row}>
           <div className={styles.right}>حالة الشحن</div>

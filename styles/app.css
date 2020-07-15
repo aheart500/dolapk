@@ -90,7 +90,8 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 80%;
-  float: left;
+  float: right;
+  page-break-inside: avoid;
 }
 
 .card-row {
