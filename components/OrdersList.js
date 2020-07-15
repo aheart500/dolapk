@@ -97,6 +97,11 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     marginLeft: "auto",
+    fontFamily: "Cairo",
+    [theme.breakpoints.down(800)]: {
+      marginLeft: "unset",
+      marginBottom: "0.5rem",
+    },
   },
   search: {
     position: "relative",
@@ -263,10 +268,7 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
           color="primary"
           variant="contained"
           size="large"
-          style={{
-            marginLeft: "auto",
-            width: "20%",
-          }}
+          className="addOrder"
           onClick={() => addOrder()}
           endIcon={<PostAddIcon />}
         >
@@ -377,7 +379,7 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
           </div>
         )}
       </Toolbar>
-      <div className={classes.tableContainer}>
+      <div className={classes.tableContainer} dir="rtl">
         <Table className={classes.table} size="small">
           <TableHead>
             <TableRow>
@@ -451,15 +453,9 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
                   </TableCell>
                   <TableCell align="right">{order.customer.name}</TableCell>
                   <TableCell align="right">{order.customer.phone}</TableCell>
-                  <TableCell align="right" style={{ width: "20rem" }}>
-                    {order.customer.address}
-                  </TableCell>
-                  <TableCell align="right" style={{ width: "40rem" }}>
-                    {order.details}
-                  </TableCell>
-                  <TableCell align="right" style={{ width: "30rem" }}>
-                    {order.notes}
-                  </TableCell>
+                  <TableCell align="right">{order.customer.address}</TableCell>
+                  <TableCell align="right">{order.details}</TableCell>
+                  <TableCell align="right">{order.notes}</TableCell>
                   <TableCell align="right">{`${order.price}$`}</TableCell>
 
                   <TableCell align="right">
