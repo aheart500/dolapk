@@ -57,15 +57,9 @@ class PrintTable extends Component {
                   </TableCell>
                   <TableCell>{order.customer.name}</TableCell>
                   <TableCell align="right">{order.customer.phone}</TableCell>
-                  <TableCell align="right" style={{ width: "40rem" }}>
-                    {order.customer.address}
-                  </TableCell>
-                  <TableCell align="right" style={{ width: "40rem" }}>
-                    {order.details}
-                  </TableCell>
-                  <TableCell align="right" style={{ width: "20rem" }}>
-                    {order.notes}
-                  </TableCell>
+                  <TableCell align="right">{order.customer.address}</TableCell>
+                  <TableCell align="right">{order.details}</TableCell>
+                  <TableCell align="right">{order.notes}</TableCell>
 
                   <TableCell align="right">
                     {order.shipped ? "تم الشحن" : "قيد المعالجة"}
