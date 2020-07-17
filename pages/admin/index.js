@@ -15,7 +15,7 @@ const Admin = () => {
   const [selectedOrderId, setSelectedOrderId] = useState("");
   const [editOrder, setEditOrder] = useState({});
   const [open, setOpen] = useState(false);
-  const [tap, setTap] = useState("main");
+  const [tap, setTap] = useState("list-all");
   const [onlineUsers, setOnlineUsers] = useState([]);
   const {
     languageState: { language },
@@ -52,6 +52,8 @@ const Admin = () => {
         return (
           <OrdersList
             list="all"
+            users={onlineUsers.filter((user) => user !== userState.name)}
+            name={userState.name}
             showOrder={() => setTap("order")}
             addOrder={() => setTap("order-form-add")}
             setOrder={setSelectedOrderId}
@@ -61,6 +63,8 @@ const Admin = () => {
         return (
           <OrdersList
             list="waiting"
+            users={onlineUsers.filter((user) => user !== userState.name)}
+            name={userState.name}
             showOrder={() => setTap("order")}
             addOrder={() => setTap("order-form-add")}
             setOrder={setSelectedOrderId}
@@ -70,6 +74,8 @@ const Admin = () => {
         return (
           <OrdersList
             list="finished"
+            users={onlineUsers.filter((user) => user !== userState.name)}
+            name={userState.name}
             showOrder={() => setTap("order")}
             addOrder={() => setTap("order-form-add")}
             setOrder={setSelectedOrderId}
@@ -79,6 +85,8 @@ const Admin = () => {
         return (
           <OrdersList
             list="cancelled"
+            users={onlineUsers.filter((user) => user !== userState.name)}
+            name={userState.name}
             addOrder={() => setTap("order-form-add")}
             showOrder={() => setTap("order")}
             setOrder={setSelectedOrderId}

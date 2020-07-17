@@ -150,8 +150,7 @@ const Drawer_ = ({
           </List>
           <footer
             style={{
-              position: "absolute",
-              bottom: "1rem",
+              marginTop: "auto",
               width: "100%",
               textAlign: "center",
             }}
