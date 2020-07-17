@@ -158,23 +158,13 @@ const track = () => {
           </div>
           <div className={styles.row}>
             <div className={styles.right}>السعر</div>
-            <div>{`$${order.price}`}</div>
-          </div>
-          <div className={styles.row}>
-            <div className={styles.right}>حالة الشحن</div>
-            <div
-              style={{
-                margin: "1rem",
-              }}
-            >
-              <span
-                className={order.shipped ? "tag processed" : "tag processing"}
-              >
-                {" "}
-                {order.shipped ? "تم الشحن" : "قيد المعالجة"}
-              </span>
+            <div dir="ltr">
+              {`${order.price.order} EGP + ${
+                order.price.shipment || "0"
+              } EGP = ${order.price.order + order.price.shipment} EGP`}
             </div>
           </div>
+
           <div className={styles.row}>
             <div className={styles.right}>حالة الطلب</div>
             <div
@@ -182,9 +172,21 @@ const track = () => {
                 margin: "1rem",
               }}
             >
-              <span className={order.finished ? "tag finished" : "tag waiting"}>
+              <span
+                className={
+                  order.status === "تم التسليم"
+                    ? "tag finished"
+                    : order.status === "في انتظار التسليم"
+                    ? "tag waiting"
+                    : order.status === "جاهز للشحن"
+                    ? "tag processed"
+                    : order.status === "تم التسليم للشحن"
+                    ? "tag delievered"
+                    : "tag processing"
+                }
+              >
                 {" "}
-                {order.finished ? "تم التسليم" : "في انتظار التسليم"}
+                {order.status}
               </span>
             </div>
           </div>

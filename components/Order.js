@@ -1,35 +1,58 @@
-import React, { useState } from "react";
 import styles from "../styles/order.module.css";
 import {
   GET_ORDER,
-  FINISH_ORDERS,
-  UNFINISH_ORDERS,
+  UPDATE_ORDERS,
   CANCEL_ORDERS,
   UNCANCEL_ORDERS,
-  SHIP_ORDERS,
-  UNSHIP_ORDERS,
   DELETE_ORDERS,
 } from "../GraphQL";
+import Slider from "@material-ui/core/Slider";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import Loader from "./Loader";
 import Switch from "@material-ui/core/Switch";
 import { Button } from "@material-ui/core";
-const Order = ({ orderId, editOrder, backToList, setSelectedOrderId }) => {
+
+const marks = [
+  {
+    value: 0,
+    label: "قيد المعالجة",
+  },
+  {
+    value: 25,
+    label: "جاهز للشحن",
+  },
+  {
+    value: 50,
+    label: "تم التسليم للشحن",
+  },
+  {
+    value: 75,
+    label: "في انتظار التسليم",
+  },
+  {
+    value: 100,
+    label: "تم التسليم",
+  },
+];
+
+const valueLabelFormat = (value) => {
+  return value;
+};
+const Order = ({
+  orderId,
+  editOrder,
+  backToList,
+  setSelectedOrderId,
+  addOrder,
+}) => {
   const { data, error, loading, refetch } = useQuery(GET_ORDER, {
     variables: { id: orderId },
   });
-  const [finishOrder] = useMutation(FINISH_ORDERS, {
-    variables: { ids: [orderId] },
+
+  const [updataStatus] = useMutation(UPDATE_ORDERS, {
+    variables: { ids: [orderId], status },
   });
-  const [unfinishOrder] = useMutation(UNFINISH_ORDERS, {
-    variables: { ids: [orderId] },
-  });
-  const [shipOrder] = useMutation(SHIP_ORDERS, {
-    variables: { ids: [orderId] },
-  });
-  const [unshipOrder] = useMutation(UNSHIP_ORDERS, {
-    variables: { ids: [orderId] },
-  });
+
   const [cancelOrder] = useMutation(CANCEL_ORDERS, {
     variables: { ids: [orderId] },
   });
@@ -43,14 +66,19 @@ const Order = ({ orderId, editOrder, backToList, setSelectedOrderId }) => {
   if (error) return <h1>Error</h1>;
   if (!data) return <h2>Sorry we didn't find your order</h2>;
   let order = data.getOrder;
-  const handleAction = async (e, action) => {
-    let checked = e.target.checked;
+  const handleAction = async (e, action, n) => {
+    let newStatus = marks.find((mark) => mark.value === n);
+
     try {
-      if (action === "shipment") {
-        checked ? await shipOrder() : await unshipOrder();
-      } else if (action === "finish") {
-        checked ? await finishOrder() : await unfinishOrder();
+      if (action === "update") {
+        await updataStatus({
+          variables: {
+            ids: [orderId],
+            status: newStatus.label,
+          },
+        });
       } else if (action === "cancel") {
+        let checked = e.target.checked;
         checked ? await cancelOrder() : await uncancelOrder();
       } else {
         return;
@@ -80,14 +108,35 @@ const Order = ({ orderId, editOrder, backToList, setSelectedOrderId }) => {
     const updatedAt = new Date(parseInt(order.updated_at))
       .toString()
       .replace("GMT+0200 (Eastern European Standard Time)", "");
+    const sliderDefault =
+      order.status === "جاهز للشحن"
+        ? 25
+        : order.status === "تم التسليم للشحن"
+        ? 50
+        : order.status === "في انتظار التسليم"
+        ? 75
+        : order.status === "تم التسليم"
+        ? 100
+        : 0;
     return (
       <div className={styles.orderContainer}>
-        <Button variant="outlined" onClick={() => backToList()}>
-          العودة لقائمة الطلبات
-        </Button>
-        <Button variant="outlined" onClick={() => refetch()}>
-          إعادة تحميل الطلب
-        </Button>
+        <div
+          style={{
+            textAlign: "center",
+            display: "flex",
+            justifyContent: "space-around",
+          }}
+        >
+          <Button variant="outlined" onClick={() => backToList()}>
+            العودة لقائمة الطلبات
+          </Button>
+          <Button variant="outlined" onClick={() => addOrder()}>
+            إضافة طلب جديد
+          </Button>
+          <Button variant="outlined" onClick={() => refetch()}>
+            إعادة تحميل الطلب
+          </Button>
+        </div>
         <div className={styles.row}>
           <div className={styles.right}>رقم الطلب</div>
           <div>{order.trackID ? formedID : ""}</div>
@@ -114,29 +163,11 @@ const Order = ({ orderId, editOrder, backToList, setSelectedOrderId }) => {
         </div>
         <div className={styles.row}>
           <div className={styles.right}>السعر</div>
-          <div dir="ltr">{`${order.price} EGP`}</div>
+          <div dir="ltr">{`${order.price.order} EGP + ${
+            order.price.shipment || "0"
+          } EGP = ${order.price.order + order.price.shipment} EGP`}</div>
         </div>
-        <div className={styles.row}>
-          <div className={styles.right}>حالة الشحن</div>
-          <div
-            style={{
-              margin: "1rem",
-            }}
-          >
-            <span
-              className={order.shipped ? "tag processed" : "tag processing"}
-            >
-              {" "}
-              {order.shipped ? "تم الشحن" : "قيد المعالجة"}
-            </span>
-          </div>
-          <Switch
-            checked={order.shipped}
-            onChange={(e) => handleAction(e, "shipment")}
-            name="checkedA"
-            inputProps={{ "aria-label": "secondary checkbox" }}
-          />
-        </div>
+
         <div className={styles.row}>
           <div className={styles.right}>حالة الطلب</div>
           <div
@@ -144,16 +175,31 @@ const Order = ({ orderId, editOrder, backToList, setSelectedOrderId }) => {
               margin: "1rem",
             }}
           >
-            <span className={order.finished ? "tag finished" : "tag waiting"}>
+            <span
+              className={
+                order.status === "تم التسليم"
+                  ? "tag finished"
+                  : order.status === "في انتظار التسليم"
+                  ? "tag waiting"
+                  : order.status === "جاهز للشحن"
+                  ? "tag processed"
+                  : order.status === "تم التسليم للشحن"
+                  ? "tag delievered"
+                  : "tag processing"
+              }
+            >
               {" "}
-              {order.finished ? "تم التسليم" : "في انتظار التسليم"}
+              {order.status}
             </span>
           </div>
-          <Switch
-            checked={order.finished}
-            onChange={(e) => handleAction(e, "finish")}
-            name="checkedA"
-            inputProps={{ "aria-label": "secondary checkbox" }}
+          <Slider
+            value={sliderDefault}
+            valueLabelFormat={valueLabelFormat}
+            onChange={(e, n) => handleAction(e, "update", n)}
+            step={null}
+            valueLabelDisplay="auto"
+            marks={marks}
+            className="order-slider"
           />
         </div>
         <div className={styles.row}>
@@ -202,7 +248,6 @@ const Order = ({ orderId, editOrder, backToList, setSelectedOrderId }) => {
           }}
         >
           <Button
-            onClick={() => console.log("dehk")}
             variant="contained"
             style={{
               margin: "0 1rem",

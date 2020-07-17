@@ -12,17 +12,19 @@ const OrderSchema = new mongoose.Schema(
     trackID: Number,
     details: String,
     notes: { type: String, default: "" },
-    price: Number,
-    finished: { type: Boolean, default: false },
+    price: {
+      order: Number,
+      shipment: Number,
+    },
+    status: { type: String, default: "قيد المعالجة" },
     cancelled: { type: Boolean, default: false },
-    shipped: { type: Boolean, default: false },
     created_by: String,
     updated_by: String,
   },
   { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );
 
-OrderSchema.index({ finished: -1 });
+OrderSchema.index({ status: -1 });
 OrderSchema.index({ cancelled: -1 });
 OrderSchema.index({ updated_at: -1 });
 OrderSchema.plugin(AutoIncrement.plugin, {

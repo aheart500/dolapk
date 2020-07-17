@@ -47,7 +47,13 @@ class PrintCards extends Component {
               </div>
               <div className="card-row">
                 <div className="card-right">السعر</div>
-                <div dir="ltr">{`${order.price} EGP`}</div>
+                <div dir="rtl">
+                  {`${order.price.order} + ${order.price.shipment || "0"} = `}
+                  <span dir="ltr">
+                    {order.price.order + order.price.shipment} EGP
+                  </span>{" "}
+                </div>
+
                 <div
                   style={{
                     marginRight: "auto",

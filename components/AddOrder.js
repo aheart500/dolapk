@@ -9,7 +9,8 @@ const initialState = {
   customer_address: "",
   details: "",
   notes: "",
-  price: "",
+  order_price: "",
+  shipment_price: "",
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -31,8 +32,8 @@ const AddOrder = ({ showOrder, setSelectedOrderId }) => {
     customer_phone,
     customer_address,
     details,
-    notes,
-    price,
+    order_price,
+    shipment_price,
   } = state;
   const handleChange = (e) => {
     dispatch({ type: "field", field: e.target.name, value: e.target.value });
@@ -45,17 +46,30 @@ const AddOrder = ({ showOrder, setSelectedOrderId }) => {
       !customer_phone ||
       !customer_address ||
       !details ||
-      !price ||
-      isNaN(parseFloat(price))
+      !order_price ||
+      customer_phone.length !== 11
     ) {
+      let newErrors = [];
       Object.keys(state).forEach((name) => {
         if (state[name] === "" || state[name] === " ") {
-          name === "notes" ? null : setErrors((prev) => [...prev, name]);
+          name === "notes"
+            ? null
+            : name === "shipment_price"
+            ? null
+            : newErrors.push(name);
+        }
+        if (customer_phone.length !== 11) {
+          newErrors.push("customer_phone");
         }
       });
+      setErrors(newErrors);
     } else {
       addOrder({
-        variables: { ...state, price: parseFloat(price) },
+        variables: {
+          ...state,
+          order_price: parseFloat(order_price),
+          shipment_price: parseFloat(shipment_price),
+        },
       })
         .then(({ data }) => {
           setSelectedOrderId(data.addOrder.id);
@@ -92,6 +106,17 @@ const AddOrder = ({ showOrder, setSelectedOrderId }) => {
               error={errors.includes("customer_phone")}
               fullWidth
             />
+            {errors.includes("customer_phone") && (
+              <p
+                style={{
+                  marginTop: "0.5rem",
+                  color: "red",
+                }}
+              >
+                {" "}
+                يجب أن يكون رقم الهاتف مكوناً من 11 رقم فقط
+              </p>
+            )}
           </div>
         </div>
         <div className={styles.row}>
@@ -143,13 +168,27 @@ const AddOrder = ({ showOrder, setSelectedOrderId }) => {
           <div className={styles.textBoxContainer}>
             {" "}
             <TextField
-              value={state.price}
+              value={state.order_price}
               type="number"
-              name="price"
-              error={errors.includes("price")}
+              name="order_price"
+              error={errors.includes("order_price")}
               helperText="تأكد من إدخال رقم"
               onChange={handleChange}
-              fullWidth
+              placeholder="سعر الطلب"
+              style={{
+                marginLeft: "1rem",
+              }}
+            />
+            +
+            <TextField
+              value={state.shipment_price}
+              type="number"
+              name="shipment_price"
+              placeholder="سعر الشحن"
+              error={errors.includes("shipment_price")}
+              helperText="تأكد من إدخال رقم"
+              onChange={handleChange}
+              className="shipment-price"
             />
           </div>
         </div>

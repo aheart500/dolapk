@@ -110,6 +110,7 @@ const Admin = () => {
               setEditOrder(order);
               setTap("order-form-edit");
             }}
+            addOrder={() => setTap("order-form-add")}
             backToList={() => setTap("list-all")}
             setSelectedOrderId={setSelectedOrderId}
           />
