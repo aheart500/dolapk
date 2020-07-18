@@ -1,6 +1,11 @@
-const AdminMain = ({ users, name }) => {
-  return (
-    <div
+const AdminMain = () => {
+  return <div></div>;
+};
+
+export default AdminMain;
+
+/* 
+<div
       style={{
         width: "70%",
         margin: "2rem auto",
@@ -20,7 +25,5 @@ const AdminMain = ({ users, name }) => {
         })}
       </ul>
     </div>
-  );
-};
 
-export default AdminMain;
+*/

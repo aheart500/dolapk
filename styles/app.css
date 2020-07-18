@@ -85,7 +85,25 @@ body {
     margin-right: unset;
   }
 }
+.track-container {
+  width: 70%;
+  margin: 2rem auto;
+  direction: rtl;
+  font-family: "Cairo";
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 5px;
+  font-size: 1.2rem;
+}
+.track-row {
+  display: flex;
+  flex-direction: row;
 
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 10px;
+  align-items: center;
+}
 .cards-container {
   display: flex !important;
   flex-direction: row !important;
@@ -134,5 +152,17 @@ body {
   }
   .printCards {
     display: block !important;
+  }
+}
+
+@media (max-width: 500px) {
+  .track-container {
+    width: 95%;
+  }
+  .track-row {
+    flex-direction: column;
+  }
+  .right {
+    width: 100%;
   }
 }

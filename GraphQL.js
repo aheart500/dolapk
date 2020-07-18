@@ -41,6 +41,9 @@ export const GET_ORDER_SENSETIVE = gql`
         order
         shipment
       }
+      customer {
+        name
+      }
       status
       cancelled
       trackID

@@ -258,8 +258,8 @@ const TableToolBar = ({
               </IconButton>
             </Tooltip>
             <Tooltip
-              title="في انتظار التسليم"
-              onClick={() => handleAction("updataStatus", "في انتظار التسليم")}
+              title="جاري توزيع الشحنة"
+              onClick={() => handleAction("updataStatus", "جاري توزيع الشحنة")}
             >
               <IconButton>
                 <CachedIcon />

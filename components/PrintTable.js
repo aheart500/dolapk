@@ -31,8 +31,8 @@ class PrintTable extends Component {
               <TableCell align="right">الطلب</TableCell>
               <TableCell align="right">ملاحظات</TableCell>
 
-              <TableCell align="right">الشحن </TableCell>
-              <TableCell align="right">التسليم</TableCell>
+              <TableCell align="right">الحالة </TableCell>
+
               <TableCell align="right">السعر</TableCell>
             </TableRow>
           </TableHead>
@@ -60,14 +60,11 @@ class PrintTable extends Component {
                   <TableCell align="right">{order.customer.address}</TableCell>
                   <TableCell align="right">{order.details}</TableCell>
                   <TableCell align="right">{order.notes}</TableCell>
+                  <TableCell align="right">{order.status}</TableCell>
 
-                  <TableCell align="right">
-                    {order.shipped ? "تم الشحن" : "قيد المعالجة"}
-                  </TableCell>
-                  <TableCell align="right">
-                    {order.finished ? "تم التسليم" : "في انتظار التسليم"}
-                  </TableCell>
-                  <TableCell align="right">{`${order.price}$`}</TableCell>
+                  <TableCell align="right">{`${
+                    order.price.order + order.price.shipment
+                  }$`}</TableCell>
                 </TableRow>
               );
             })}

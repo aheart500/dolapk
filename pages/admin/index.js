@@ -9,51 +9,44 @@ import OrdersList from "../../components/OrdersList";
 import AddOrder from "../../components/AddOrder";
 import EditOrder from "../../components/EditOrder";
 import Order from "../../components/Order";
-import io from "socket.io-client";
+/* import io from "socket.io-client"; */
 const Admin = () => {
   const { userState, Logout } = useContext(UserContext);
   const [selectedOrderId, setSelectedOrderId] = useState("");
   const [editOrder, setEditOrder] = useState({});
   const [open, setOpen] = useState(false);
   const [tap, setTap] = useState("list-all");
-  const [onlineUsers, setOnlineUsers] = useState([]);
+  /*  const [onlineUsers, setOnlineUsers] = useState([]); */
   const {
     languageState: { language },
     changeLang,
   } = useContext(LanguageContext);
   const router = useRouter();
   const [pageLoading, setPageLoading] = useState(true);
-  const socket = io();
+  /*  const socket = io(); */
   useEffect(() => {
     if (!userState.isLoggedIn) {
       router.replace("/admin/login");
     } else {
       setPageLoading(false);
 
-      socket.emit("logged", {
+      /* socket.emit("logged", {
         name: userState.name,
       });
       socket.on("users", (data) => {
         setOnlineUsers(data.onlineUsers);
-      });
+      }); */
     }
   }, []);
 
   const renderedTap = () => {
     switch (tap) {
       case "main":
-        return (
-          <AdminMain
-            users={onlineUsers.filter((user) => user !== userState.name)}
-            name={userState.name}
-          />
-        );
+        return <AdminMain />;
       case "list-all":
         return (
           <OrdersList
             list="all"
-            users={onlineUsers.filter((user) => user !== userState.name)}
-            name={userState.name}
             showOrder={() => setTap("order")}
             addOrder={() => setTap("order-form-add")}
             setOrder={setSelectedOrderId}
@@ -63,8 +56,6 @@ const Admin = () => {
         return (
           <OrdersList
             list="waiting"
-            users={onlineUsers.filter((user) => user !== userState.name)}
-            name={userState.name}
             showOrder={() => setTap("order")}
             addOrder={() => setTap("order-form-add")}
             setOrder={setSelectedOrderId}
@@ -74,8 +65,6 @@ const Admin = () => {
         return (
           <OrdersList
             list="finished"
-            users={onlineUsers.filter((user) => user !== userState.name)}
-            name={userState.name}
             showOrder={() => setTap("order")}
             addOrder={() => setTap("order-form-add")}
             setOrder={setSelectedOrderId}
@@ -85,8 +74,6 @@ const Admin = () => {
         return (
           <OrdersList
             list="cancelled"
-            users={onlineUsers.filter((user) => user !== userState.name)}
-            name={userState.name}
             addOrder={() => setTap("order-form-add")}
             showOrder={() => setTap("order")}
             setOrder={setSelectedOrderId}

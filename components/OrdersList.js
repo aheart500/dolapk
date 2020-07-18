@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrdersList = ({ list, showOrder, setOrder, addOrder, users, name }) => {
+const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
   const [orders, setOrders] = useState([]);
   const [selected, setSelected] = useState([]);
   const [search, setSearch] = useState("");
@@ -99,26 +99,6 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder, users, name }) => {
   if (!data) return <Loader />;
   return (
     <div>
-      <div
-        style={{
-          width: "70%",
-          margin: "2rem auto",
-          display:
-            name === "Omar Mohamed"
-              ? "block"
-              : name === "Mohamed Nasser"
-              ? "block"
-              : "none",
-        }}
-      >
-        <h4>Online users:</h4>
-        <ul style={{ color: "green" }}>
-          <li>You</li>
-          {users.map((user, i) => {
-            return <li key={i}>{user}</li>;
-          })}
-        </ul>
-      </div>
       <TableToolBar
         numSelected={numSelected}
         selected={selected}
@@ -216,7 +196,7 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder, users, name }) => {
                       className={
                         order.status === "تم التسليم"
                           ? "tag finished"
-                          : order.status === "في انتظار التسليم"
+                          : order.status === "جاري توزيع الشحنة"
                           ? "tag waiting"
                           : order.status === "جاهز للشحن"
                           ? "tag processed"

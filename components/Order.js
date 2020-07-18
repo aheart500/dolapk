@@ -27,7 +27,7 @@ const marks = [
   },
   {
     value: 75,
-    label: "في انتظار التسليم",
+    label: "جاري توزيع الشحنة",
   },
   {
     value: 100,
@@ -113,7 +113,7 @@ const Order = ({
         ? 25
         : order.status === "تم التسليم للشحن"
         ? 50
-        : order.status === "في انتظار التسليم"
+        : order.status === "جاري توزيع الشحنة"
         ? 75
         : order.status === "تم التسليم"
         ? 100
@@ -179,7 +179,7 @@ const Order = ({
               className={
                 order.status === "تم التسليم"
                   ? "tag finished"
-                  : order.status === "في انتظار التسليم"
+                  : order.status === "جاري توزيع الشحنة"
                   ? "tag waiting"
                   : order.status === "جاهز للشحن"
                   ? "tag processed"

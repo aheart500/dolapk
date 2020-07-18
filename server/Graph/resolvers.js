@@ -8,6 +8,31 @@ const SECRET = process.env.SECRET;
 const jwt = require("jsonwebtoken");
 const OrderModel = require("../models/order");
 const AdminModel = require("../models/admin");
+const sendMessages = require("../utils/sendMessages");
+const messages = require("../utils/messages");
+
+const sendMiddleWare = async (token, ids, status) => {
+  const message =
+    status === "تم التسليم"
+      ? messages.delivered
+      : status === "جاهز للشحن"
+      ? messages.ready_for_shipment
+      : status === "جاري توزيع الشحنة"
+      ? messages.ready_for_distribution
+      : status === "تم التسليم للشحن"
+      ? messages.shipped
+      : null;
+  if (message) {
+    let orders = await OrderModel.find({ _id: { $in: ids } }).select({
+      trackID: 1,
+      customer: 1,
+    });
+
+    orders.forEach((order) => {
+      sendMessages(token, message(order.trackID), [order.customer.phone]);
+    });
+  }
+};
 
 const orArrF = (search) => {
   return [
@@ -28,7 +53,7 @@ const resolvers = {
 
       let query = args.category
         ? args.category === "waiting"
-          ? { status: "في انتظار التسليم" }
+          ? { status: "جاري توزيع الشحنة" }
           : args.category === "finished"
           ? { status: "تم التسليم" }
           : {}
@@ -80,9 +105,9 @@ const resolvers = {
         img: admin.img ? admin.img : null,
       };
     },
-    addOrder: (root, args, c) => {
+    addOrder: async (root, args, c) => {
       if (!c.currentAdmin) throw new AuthenticationError("Not Authinticated");
-      const newOrder = new OrderModel({
+      let newOrder = new OrderModel({
         id: Math.floor(Math.random() * 100),
         cancelled: false,
         notes: args.notes ? args.notes : null,
@@ -98,7 +123,11 @@ const resolvers = {
         },
         created_by: c.currentAdmin.name,
       });
-      return newOrder.save();
+      await newOrder.save();
+      sendMessages(c.token, messages.added_message(newOrder.trackID), [
+        newOrder.customer.phone,
+      ]);
+      return newOrder;
     },
     editOrder: async (root, args, c) => {
       if (!c.currentAdmin) throw new AuthenticationError("Not Authinticated");
@@ -125,17 +154,23 @@ const resolvers = {
       return order;
     },
 
-    updateStatus: async (root, args) => {
+    updateStatus: async (root, args, c) => {
       await OrderModel.updateMany(
         { _id: { $in: args.ids } },
         { status: args.status }
       );
+      sendMiddleWare(c.token, args.ids, args.status);
       return `Updated ${args.ids.length} orders successfully`;
     },
-    cancelOrders: async (root, args) => {
-      await OrderModel.updateMany(
+    cancelOrders: async (root, args, c) => {
+      const orders = await OrderModel.updateMany(
         { _id: { $in: args.ids } },
         { cancelled: true }
+      );
+      sendMessages(
+        c.token,
+        messages.cancelled(),
+        orders.map((order) => order.customer.phone)
       );
       return `Cancelled ${args.ids.length} orders successfully`;
     },

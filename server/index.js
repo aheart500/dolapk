@@ -31,10 +31,11 @@ app.all("*", (req, res) => {
 });
 NextApp.prepare().then(() => {
   const server = createServer(app);
-  const io = require("socket.io")(server);
+  /* 
+   const io = require("socket.io")(server);
   let onlineUsers = [];
 
-  io.on("connect", (socket) => {
+ io.on("connect", (socket) => {
     let name = "";
     socket.on("logged", (args) => {
       name = args.name;
@@ -49,7 +50,7 @@ NextApp.prepare().then(() => {
         onlineUsers,
       });
     });
-  });
+  }); */
   server.listen(PORT, (err) => {
     if (err) throw err;
     console.log("Server is listening on " + PORT);

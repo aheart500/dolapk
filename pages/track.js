@@ -125,38 +125,37 @@ const track = () => {
       )}
 
       {order && (
-        <div className={styles.orderContainer}>
-          <div className={styles.row}>
+        <div className="track-container">
+          <div className="track-row">
             <div className={styles.right}>رقم الطلب</div>
             <div>{order.trackID ? formedID : ""}</div>
           </div>
-
-          {order.customer && (
+          <div className="track-row">
+            <div className={styles.right}>الأسم</div>
+            <div>{order.customer.name}</div>
+          </div>
+          {isLoggedIn && (
             <>
-              <div className={styles.row}>
-                <div className={styles.right}>الأسم</div>
-                <div>{order.customer.name}</div>
-              </div>
-              <div className={styles.row}>
+              <div className="track-row">
                 <div className={styles.right}>رقم الهاتف</div>
                 <div>{order.customer.phone}</div>
               </div>
-              <div className={styles.row}>
+              <div className="track-row">
                 <div className={styles.right}>العنوان</div>
                 <div>{order.customer.address}</div>
               </div>
             </>
           )}
 
-          <div className={styles.row}>
+          <div className="track-row">
             <div className={styles.right}>تفاصيل الطلب</div>
             <div>{order.details}</div>
           </div>
-          <div className={styles.row}>
+          <div className="track-row">
             <div className={styles.right}>ملاحظات</div>
             <div>{order.notes}</div>
           </div>
-          <div className={styles.row}>
+          <div className="track-row">
             <div className={styles.right}>السعر</div>
             <div dir="ltr">
               {`${order.price.order} EGP + ${
@@ -165,7 +164,7 @@ const track = () => {
             </div>
           </div>
 
-          <div className={styles.row}>
+          <div className="track-row">
             <div className={styles.right}>حالة الطلب</div>
             <div
               style={{
@@ -176,7 +175,7 @@ const track = () => {
                 className={
                   order.status === "تم التسليم"
                     ? "tag finished"
-                    : order.status === "في انتظار التسليم"
+                    : order.status === "جاري توزيع الشحنة"
                     ? "tag waiting"
                     : order.status === "جاهز للشحن"
                     ? "tag processed"
@@ -190,7 +189,7 @@ const track = () => {
               </span>
             </div>
           </div>
-          <div className={styles.row}>
+          <div className="track-row">
             <div className={styles.right}>فعّال</div>
             <div
               style={{
@@ -207,21 +206,21 @@ const track = () => {
           </div>
           {isLoggedIn && (
             <>
-              <div className={styles.row}>
+              <div className="track-row">
                 <div className={styles.right}>مُسَّجِل الطلب</div>
                 <div>{order.created_by}</div>
               </div>
-              <div className={styles.row}>
+              <div className="track-row">
                 <div className={styles.right}>تاريخ التسجيل</div>
                 <div style={{ direction: "ltr" }}>{createdAt}</div>
               </div>
-              <div className={styles.row}>
+              <div className="track-row">
                 <div className={styles.right}>مُعَّدِل الطلب</div>
                 <div>
                   {order.updated_by ? order.updated_by : "لم يتم التعديل"}
                 </div>
               </div>
-              <div className={styles.row}>
+              <div className="track-row">
                 <div className={styles.right}>تاريخ التعديل</div>
                 <div style={{ direction: "ltr" }}>
                   {order.updated_by ? updatedAt : ""}
