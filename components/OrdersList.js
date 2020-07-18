@@ -10,6 +10,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Checkbox from "@material-ui/core/Checkbox";
 import TableToolBar from "./TableToolBar";
+import { Waypoint } from "react-waypoint";
 const tableHeads = [
   "ID",
   "الأسم",
@@ -42,6 +43,8 @@ const useStyles = makeStyles((theme) => ({
   tableContainer: {
     width: "95%",
     margin: " 1rem auto",
+    height: "90vh",
+
     overflow: "scroll",
     [theme.breakpoints.down("sm")]: {
       width: "100%",
@@ -53,15 +56,18 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
   const [orders, setOrders] = useState([]);
   const [selected, setSelected] = useState([]);
   const [search, setSearch] = useState("");
-  const { data, error, loading, fetchMore, refetch } = useQuery(LAST_ORDERS, {
-    variables: { limit: 10, category: list === "all" ? "" : list, search },
-  });
+  const { data, error, loading, fetchMore, refetch, networkStatus } = useQuery(
+    LAST_ORDERS,
+    {
+      variables: { limit: 10, category: list === "all" ? "" : list, search },
+      notifyOnNetworkStatusChange: true,
+    }
+  );
   const classes = useStyles();
-
   useEffect(() => {
     if (data) setOrders(data.lastOrders);
   }, [data]);
-
+  console.log(networkStatus);
   const loadMore = () => {
     fetchMore({
       variables: { cursor: orders[orders.length - 1].id, search },
@@ -103,7 +109,6 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
         numSelected={numSelected}
         selected={selected}
         refetch={refetch}
-        loadMore={loadMore}
         setSearch={setSearch}
         setSelected={setSelected}
         addOrder={addOrder}
@@ -233,12 +238,16 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
                     >
                       عرض
                     </button>
+                    {index === orders.length - 1 && (
+                      <Waypoint onEnter={() => loadMore()} />
+                    )}
                   </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
+        {loading ? <h3>Loading...</h3> : null}
       </div>
     </div>
   );

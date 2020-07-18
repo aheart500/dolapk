@@ -93,7 +93,7 @@ const TableToolBar = ({
   numSelected,
   selected,
   refetch,
-  loadMore,
+
   setSearch,
   addOrder,
   setSelected,
@@ -176,10 +176,6 @@ const TableToolBar = ({
           أضف طلب جديد
         </Button>
         <>
-          <Button onClick={() => loadMore()} variant="contained">
-            تحميل المزيد
-          </Button>
-
           <Button
             onClick={() => refetch()}
             variant="contained"
