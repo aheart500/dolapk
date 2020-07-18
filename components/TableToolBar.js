@@ -25,7 +25,7 @@ import {
   UNCANCEL_ORDERS,
   DELETE_ORDERS,
 } from "../GraphQL";
-import { useQuery, useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/react-hooks";
 import { useRef } from "react";
 const useStyles = makeStyles((theme) => ({
   toolbar: {
