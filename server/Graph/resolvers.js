@@ -63,6 +63,8 @@ const resolvers = {
             }
           : args.category === "finished"
           ? { status: "تم التسليم" }
+          : args.category === "cancelled"
+          ? { cancelled: true }
           : {}
         : {};
       if (args.cursor) {
