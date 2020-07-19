@@ -66,7 +66,6 @@ const typeDefs = gql`
     updateStatus(ids: [ID!]!, status: String!): String
     cancelOrders(ids: [ID!]!): String
     unCancelOrders(ids: [ID!]!): String
-
     deleteOrders(ids: [ID!]!): String
   }
 

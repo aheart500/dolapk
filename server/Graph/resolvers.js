@@ -51,7 +51,16 @@ const resolvers = {
 
       let query = args.category
         ? args.category === "waiting"
-          ? { status: "جاري توزيع الشحنة" }
+          ? {
+              status: {
+                $in: [
+                  "قيد المعالجة",
+                  "جاهز للشحن",
+                  "تم التسليم للشحن",
+                  "جاري توزيع الشحنة",
+                ],
+              },
+            }
           : args.category === "finished"
           ? { status: "تم التسليم" }
           : {}
