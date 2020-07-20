@@ -75,11 +75,21 @@ const Order = ({
           variables: {
             ids: [orderId],
             status: newStatus.label,
+            phones: [order.customer.phone],
+            trackIds: [order.trackID],
           },
         });
       } else if (action === "cancel") {
         let checked = e.target.checked;
-        checked ? await cancelOrder() : await uncancelOrder();
+        checked
+          ? await cancelOrder({
+              variables: {
+                ids: [orderId],
+                phones: [order.customer.phone],
+                trackIds: [order.trackID],
+              },
+            })
+          : await uncancelOrder();
       } else {
         return;
       }
