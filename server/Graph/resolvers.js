@@ -124,8 +124,9 @@ const resolvers = {
         },
         created_by: c.currentAdmin.name,
       });
-
-      return newOrder.save();
+      await newOrder.save();
+      sendMessage(messages.added_message(), [args.customer_phone]);
+      return newOrder;
     },
     editOrder: async (root, args, c) => {
       if (!c.currentAdmin) throw new AuthenticationError("Not Authinticated");
@@ -185,7 +186,9 @@ const resolvers = {
         { _id: { $in: args.ids } },
         { cancelled: true }
       );
-
+      if (args.phones) {
+        sendMessage(messages.cancelled(), args.phones);
+      }
       return `Cancelled ${args.ids.length} orders successfully`;
     },
     unCancelOrders: async (root, args) => {

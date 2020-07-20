@@ -1,6 +1,8 @@
 const formatId = require("./formatId");
-const ourURL = "https://dolapk1.herokuapp.com/track";
+const ourURL = "";
+const attachLink = false;
 const message_footer = (id) => {
+  if (!attachLink) return "";
   if (id)
     return `رقم الطلب: ${formatId(
       id
