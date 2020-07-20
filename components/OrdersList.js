@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
 const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
   const [orders, setOrders] = useState([]);
   const [selected, setSelected] = useState([]);
+
   const [search, setSearch] = useState("");
   const { data, error, loading, fetchMore, refetch, networkStatus } = useQuery(
     LAST_ORDERS,
@@ -67,7 +68,6 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
   useEffect(() => {
     if (data) setOrders(data.lastOrders);
   }, [data]);
-  console.log(networkStatus);
   const loadMore = () => {
     fetchMore({
       variables: { cursor: orders[orders.length - 1].id, search },

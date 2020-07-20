@@ -113,12 +113,20 @@ const TableToolBar = ({
     refetch();
   };
 
+  const selectedOrders = orders.filter((order) => selected.includes(order.id));
+  const selectedPhones = selectedOrders.map((order) => order.customer.phone);
+  /* const selectedIds = selectedOrders.map((order) => order.trackID) */ const selectedIds = null;
   const handleAction = async (action, newStatus) => {
     try {
       switch (action) {
         case "updataStatus": {
           await updateOrders({
-            variables: { ids: selected, status: newStatus },
+            variables: {
+              ids: selected,
+              status: newStatus,
+              phones: selectedPhones,
+              trackIds: selectedIds,
+            },
           });
           break;
         }
@@ -127,7 +135,13 @@ const TableToolBar = ({
           break;
         }
         case "cancel": {
-          await cancelOrders({ variables: { ids: selected } });
+          await cancelOrders({
+            variables: {
+              ids: selected,
+              phones: selectedPhones,
+              trackIds: selectedIds,
+            },
+          });
           break;
         }
         case "delete": {

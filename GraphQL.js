@@ -122,14 +122,24 @@ export const EDIT_ORDER = gql`
 `;
 
 export const UPDATE_ORDERS = gql`
-  mutation UpdateStatus($ids: [ID!]!, $status: String!) {
-    updateStatus(ids: $ids, status: $status)
+  mutation UpdateStatus(
+    $ids: [ID!]!
+    $status: String!
+    $phones: [String!]
+    $trackIds: [Int!]
+  ) {
+    updateStatus(
+      ids: $ids
+      status: $status
+      phones: $phones
+      trackIds: $trackIds
+    )
   }
 `;
 
 export const CANCEL_ORDERS = gql`
-  mutation cancelOrders($ids: [ID!]!) {
-    cancelOrders(ids: $ids)
+  mutation cancelOrders($ids: [ID!]!, $phones: [String!], $trackIds: [Int!]) {
+    cancelOrders(ids: $ids, phones: $phones, trackIds: $trackIds)
   }
 `;
 export const UNCANCEL_ORDERS = gql`

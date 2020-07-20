@@ -63,8 +63,13 @@ const typeDefs = gql`
       order_price: Float!
       shipment_price: Float
     ): Order
-    updateStatus(ids: [ID!]!, status: String!): String
-    cancelOrders(ids: [ID!]!): String
+    updateStatus(
+      ids: [ID!]!
+      status: String!
+      phones: [String!]
+      trackIds: [Int!]
+    ): String
+    cancelOrders(ids: [ID!]!, phones: [String!], trackIds: [Int!]): String
     unCancelOrders(ids: [ID!]!): String
     deleteOrders(ids: [ID!]!): String
   }

@@ -8,18 +8,10 @@ const SECRET = process.env.SECRET;
 const jwt = require("jsonwebtoken");
 const OrderModel = require("../models/order");
 const AdminModel = require("../models/admin");
-
+const messages = require("../utils/messages");
+const sendMessage = require("../utils/sendMessage");
 /* const sendMiddleWare = async (token, ids, status) => {
-  const message =
-    status === "تم التسليم"
-      ? messages.delivered
-      : status === "جاهز للشحن"
-      ? messages.ready_for_shipment
-      : status === "جاري توزيع الشحنة"
-      ? messages.ready_for_distribution
-      : status === "تم التسليم للشحن"
-      ? messages.shipped
-      : null;
+  
   if (message) {
     let orders = await OrderModel.find({ _id: { $in: ids } }).select({
       trackID: 1,
@@ -165,6 +157,26 @@ const resolvers = {
         { _id: { $in: args.ids } },
         { status: args.status }
       );
+      if (args.phones) {
+        const message =
+          args.status === "تم التسليم"
+            ? messages.delivered
+            : args.status === "جاهز للشحن"
+            ? messages.ready_for_shipment
+            : args.status === "جاري توزيع الشحنة"
+            ? messages.ready_for_distribution
+            : args.status === "تم التسليم للشحن"
+            ? messages.shipped
+            : null;
+        if (message && !args.trackIds) {
+          sendMessage(message(), args.phones);
+        }
+        if (message && args.trackIds) {
+          args.trackIds.forEach((id, index) => {
+            sendMessage(message(id), [args.phones[index]]);
+          });
+        }
+      }
 
       return `Updated ${args.ids.length} orders successfully`;
     },
