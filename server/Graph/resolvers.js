@@ -162,12 +162,8 @@ const resolvers = {
         const message =
           args.status === "تم التسليم"
             ? messages.delivered
-            : args.status === "جاهز للشحن"
-            ? messages.ready_for_shipment
             : args.status === "جاري توزيع الشحنة"
             ? messages.ready_for_distribution
-            : args.status === "تم التسليم للشحن"
-            ? messages.shipped
             : null;
         if (message && !args.trackIds) {
           sendMessage(message(), args.phones);
