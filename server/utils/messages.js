@@ -2,12 +2,13 @@ const formatId = require("./formatId");
 const ourURL = "";
 const attachLink = false;
 const message_footer = (id) => {
-  if (!attachLink) return "";
+  if (!attachLink && id) return `رقم الطلب: ${formatId(id)}`;
+
   if (id)
     return `رقم الطلب: ${formatId(
       id
     )}\n يمكنكم الإطلاع على حالة الطلب من موقعنا: ${ourURL}`;
-  return `يمكنك الإطلاع على حالة الطلب من موقعنا ${ourURL}`;
+  return ``;
 };
 
 const added_message = (id = false) => {
