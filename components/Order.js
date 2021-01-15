@@ -160,6 +160,10 @@ const Order = ({
           <div>{order.customer.phone}</div>
         </div>
         <div className={styles.row}>
+          <div className={styles.right}>نوع التوصيل</div>
+          <div>{order.deliveryType}</div>
+        </div>
+        <div className={styles.row}>
           <div className={styles.right}>العنوان</div>
           <div>{order.customer.address}</div>
         </div>

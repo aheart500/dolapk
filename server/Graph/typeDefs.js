@@ -35,6 +35,7 @@ const typeDefs = gql`
     updated_at: String
     created_by: String
     updated_by: String
+    deliveryType: String
   }
   type Mutation {
     createAdmin(
@@ -52,6 +53,7 @@ const typeDefs = gql`
       notes: String
       order_price: Float!
       shipment_price: Float
+      deliveryType: String
     ): Order
     editOrder(
       id: ID!
@@ -62,6 +64,7 @@ const typeDefs = gql`
       notes: String
       order_price: Float!
       shipment_price: Float
+      deliveryType: String
     ): Order
     updateStatus(
       ids: [ID!]!

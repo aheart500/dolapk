@@ -68,7 +68,7 @@ const resolvers = {
           $or: orArr,
         };
       }
-      return await OrderModel.find(query).limit(args.limit).sort("-_id");
+      return await OrderModel.find(query).limit(args.limit).sort("-_id")
     },
 
     ordersCount: () => OrderModel.estimatedDocumentCount(),
@@ -112,6 +112,7 @@ const resolvers = {
         id: Math.floor(Math.random() * 100),
         cancelled: false,
         notes: args.notes ? args.notes : null,
+        deliveryType: args.deliveryType,
         customer: {
           name: args.customer_name,
           phone: args.customer_phone,
@@ -134,6 +135,7 @@ const resolvers = {
         args.id,
         {
           notes: args.notes ? args.notes : "",
+          deliveryType: args.deliveryType,
           customer: {
             name: args.customer_name,
             phone: args.customer_phone,

@@ -211,7 +211,7 @@ const TableToolBar = ({
               </Button>
             )}
             content={() => printTable.current}
-            pageStyle="@page { size: auto;  margin: 1rem;} @media print { body { -webkit-print-color-adjust: exact; } }"
+            pageStyle="@media print { body { -webkit-print-color-adjust: exact; } }"
           />
           <ReactToPrint
             trigger={() => (
@@ -225,7 +225,7 @@ const TableToolBar = ({
               </Button>
             )}
             content={() => printCards.current}
-            pageStyle="@page { size: auto;  margin: 1rem;} @media print { body { -webkit-print-color-adjust: exact; } }"
+            pageStyle=" @media print { body { -webkit-print-color-adjust: exact; } }"
           />
           <div className={classes.search}>
             <div className={classes.searchIcon}>

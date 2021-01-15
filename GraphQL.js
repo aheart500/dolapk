@@ -21,6 +21,7 @@ const PERSON_DETALIS = gql`
     updated_by
     created_at
     updated_at
+    deliveryType
   }
 `;
 
@@ -47,6 +48,7 @@ export const GET_ORDER_SENSETIVE = gql`
       status
       cancelled
       trackID
+
     }
   }
 `;
@@ -79,6 +81,7 @@ export const ADD_ORDER = gql`
     $notes: String
     $order_price: Float!
     $shipment_price: Float
+    $deliveryType: String
   ) {
     addOrder(
       customer_name: $customer_name
@@ -88,6 +91,7 @@ export const ADD_ORDER = gql`
       notes: $notes
       order_price: $order_price
       shipment_price: $shipment_price
+      deliveryType: $deliveryType
     ) {
       id
     }
@@ -104,6 +108,7 @@ export const EDIT_ORDER = gql`
     $notes: String
     $order_price: Float!
     $shipment_price: Float
+    $deliveryType: String
   ) {
     editOrder(
       id: $id
@@ -114,6 +119,7 @@ export const EDIT_ORDER = gql`
       notes: $notes
       order_price: $order_price
       shipment_price: $shipment_price
+      deliveryType: $deliveryType
     ) {
       ...allFields
     }

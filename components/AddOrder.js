@@ -2,7 +2,9 @@ import React, { useState, useReducer } from "react";
 import { useMutation } from "@apollo/react-hooks";
 import { ADD_ORDER } from "../GraphQL";
 import styles from "../styles/order.module.css";
-import { TextField, Button } from "@material-ui/core";
+import { TextField, Button, Select, MenuItem } from "@material-ui/core";
+import ListSubheader from '@material-ui/core/ListSubheader';
+
 const initialState = {
   customer_name: "",
   customer_phone: "",
@@ -11,6 +13,7 @@ const initialState = {
   notes: "",
   order_price: "",
   shipment_price: "",
+  deliveryType: ''
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -134,6 +137,28 @@ const AddOrder = ({ showOrder, setSelectedOrderId }) => {
             />
           </div>
         </div>
+        <div className={styles.row}>
+          <div className={styles.right}>نوع توصيل</div>
+          <div className={styles.textBoxContainer}>
+            {" "}
+            <Select
+          name="deliveryType"
+          value={state.deliveryType}
+          onChange={handleChange}
+          fullWidth
+        >
+        
+          <MenuItem value='مترو'>مترو</MenuItem>
+          <MenuItem value='بيت'>بيت</MenuItem>
+          <MenuItem value='QP'>QP</MenuItem>
+          <MenuItem value='Urgent'>Urgent</MenuItem>
+          <MenuItem value='البراق'>البراق</MenuItem>
+
+
+        </Select>
+            
+          </div>
+        </div> 
         <div className={styles.row}>
           <div className={styles.right}>تفاصيل الطلب</div>
           <div className={styles.textBoxContainer}>
