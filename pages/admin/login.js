@@ -54,7 +54,7 @@ export default function Login() {
     setError("");
     setLogging(true);
     try {
-      await Login(username.trim().toLowerCase(), password);
+      await Login(username.trim(), password);
       router.replace("/admin");
     } catch (e) {
       if (e.graphQLErrors) setError(e.graphQLErrors[0].message);

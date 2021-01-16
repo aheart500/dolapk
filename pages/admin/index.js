@@ -9,45 +9,40 @@ import OrdersList from "../../components/OrdersList";
 import AddOrder from "../../components/AddOrder";
 import EditOrder from "../../components/EditOrder";
 import Order from "../../components/Order";
-import io from "socket.io-client";
+/* import io from "socket.io-client"; */
 const Admin = () => {
   const { userState, Logout } = useContext(UserContext);
   const [selectedOrderId, setSelectedOrderId] = useState("");
   const [editOrder, setEditOrder] = useState({});
   const [open, setOpen] = useState(false);
-  const [tap, setTap] = useState("main");
-  const [onlineUsers, setOnlineUsers] = useState([]);
+  const [tap, setTap] = useState("list-all");
+  /*  const [onlineUsers, setOnlineUsers] = useState([]); */
   const {
     languageState: { language },
     changeLang,
   } = useContext(LanguageContext);
   const router = useRouter();
   const [pageLoading, setPageLoading] = useState(true);
-  const socket = io();
+  /*  const socket = io(); */
   useEffect(() => {
     if (!userState.isLoggedIn) {
       router.replace("/admin/login");
     } else {
       setPageLoading(false);
 
-      socket.emit("logged", {
+      /* socket.emit("logged", {
         name: userState.name,
       });
       socket.on("users", (data) => {
         setOnlineUsers(data.onlineUsers);
-      });
+      }); */
     }
   }, []);
 
   const renderedTap = () => {
     switch (tap) {
       case "main":
-        return (
-          <AdminMain
-            users={onlineUsers.filter((user) => user !== userState.name)}
-            name={userState.name}
-          />
-        );
+        return <AdminMain />;
       case "list-all":
         return (
           <OrdersList
@@ -84,6 +79,51 @@ const Admin = () => {
             setOrder={setSelectedOrderId}
           />
         );
+      case "QP":
+        return (
+          <OrdersList
+            delievryType="QP"
+            addOrder={() => setTap("order-form-add")}
+            showOrder={() => setTap("order")}
+            setOrder={setSelectedOrderId}
+          />
+        );
+      case "Urgent":
+        return (
+          <OrdersList
+            delievryType="Urgent"
+            addOrder={() => setTap("order-form-add")}
+            showOrder={() => setTap("order")}
+            setOrder={setSelectedOrderId}
+          />
+        );
+      case "البراق":
+        return (
+          <OrdersList
+            delievryType="البراق"
+            addOrder={() => setTap("order-form-add")}
+            showOrder={() => setTap("order")}
+            setOrder={setSelectedOrderId}
+          />
+        );
+      case "مترو":
+        return (
+          <OrdersList
+            delievryType="مترو"
+            addOrder={() => setTap("order-form-add")}
+            showOrder={() => setTap("order")}
+            setOrder={setSelectedOrderId}
+          />
+        );
+      case "بيت":
+        return (
+          <OrdersList
+            delievryType="بيت"
+            addOrder={() => setTap("order-form-add")}
+            showOrder={() => setTap("order")}
+            setOrder={setSelectedOrderId}
+          />
+        );
       case "order-form-add": {
         return (
           <AddOrder
@@ -110,6 +150,7 @@ const Admin = () => {
               setEditOrder(order);
               setTap("order-form-edit");
             }}
+            addOrder={() => setTap("order-form-add")}
             backToList={() => setTap("list-all")}
             setSelectedOrderId={setSelectedOrderId}
           />

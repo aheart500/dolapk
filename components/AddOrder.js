@@ -2,14 +2,20 @@ import React, { useState, useReducer } from "react";
 import { useMutation } from "@apollo/react-hooks";
 import { ADD_ORDER } from "../GraphQL";
 import styles from "../styles/order.module.css";
-import { TextField, Button } from "@material-ui/core";
+import { TextField, Button, Select, MenuItem } from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import EgyptianGovernorates from "../EgyptianGovernorates.json";
 const initialState = {
   customer_name: "",
   customer_phone: "",
   customer_address: "",
   details: "",
   notes: "",
-  price: "",
+  order_price: "",
+  shipment_price: "",
+  deliveryType: "",
+  governorate: "",
+  product: "",
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -31,12 +37,13 @@ const AddOrder = ({ showOrder, setSelectedOrderId }) => {
     customer_phone,
     customer_address,
     details,
-    notes,
-    price,
+    order_price,
+    shipment_price,
   } = state;
   const handleChange = (e) => {
     dispatch({ type: "field", field: e.target.name, value: e.target.value });
   };
+  console.log(state);
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
@@ -45,17 +52,30 @@ const AddOrder = ({ showOrder, setSelectedOrderId }) => {
       !customer_phone ||
       !customer_address ||
       !details ||
-      !price ||
-      isNaN(parseFloat(price))
+      !order_price ||
+      customer_phone.length !== 11
     ) {
+      let newErrors = [];
       Object.keys(state).forEach((name) => {
         if (state[name] === "" || state[name] === " ") {
-          name === "notes" ? null : setErrors((prev) => [...prev, name]);
+          name === "notes"
+            ? null
+            : name === "shipment_price"
+            ? null
+            : newErrors.push(name);
+        }
+        if (customer_phone.length !== 11) {
+          newErrors.push("customer_phone");
         }
       });
+      setErrors(newErrors);
     } else {
       addOrder({
-        variables: { ...state, price: parseFloat(price) },
+        variables: {
+          ...state,
+          order_price: parseFloat(order_price),
+          shipment_price: parseFloat(shipment_price),
+        },
       })
         .then(({ data }) => {
           setSelectedOrderId(data.addOrder.id);
@@ -92,6 +112,55 @@ const AddOrder = ({ showOrder, setSelectedOrderId }) => {
               error={errors.includes("customer_phone")}
               fullWidth
             />
+            {errors.includes("customer_phone") && (
+              <p
+                style={{
+                  marginTop: "0.5rem",
+                  color: "red",
+                }}
+              >
+                {" "}
+                يجب أن يكون رقم الهاتف مكوناً من 11 رقم فقط
+              </p>
+            )}
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.right}>المحافظة</div>
+          <div className={styles.textBoxContainer}>
+            {" "}
+            <Autocomplete
+              options={EgyptianGovernorates}
+              value={state.governorate}
+              onChange={(e, newValue) => {
+                dispatch({
+                  type: "field",
+                  field: "governorate",
+                  value: newValue,
+                });
+              }}
+              renderInput={(params) => (
+                <TextField {...params} variant="outlined" />
+              )}
+            />
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.right}>نوع توصيل</div>
+          <div className={styles.textBoxContainer}>
+            {" "}
+            <Select
+              name="deliveryType"
+              value={state.deliveryType}
+              onChange={handleChange}
+              fullWidth
+            >
+              <MenuItem value="مترو">مترو</MenuItem>
+              <MenuItem value="بيت">بيت</MenuItem>
+              <MenuItem value="QP">QP</MenuItem>
+              <MenuItem value="Urgent">Urgent</MenuItem>
+              <MenuItem value="البراق">البراق</MenuItem>
+            </Select>
           </div>
         </div>
         <div className={styles.row}>
@@ -105,6 +174,19 @@ const AddOrder = ({ showOrder, setSelectedOrderId }) => {
               onChange={handleChange}
               multiline
               rows={2}
+              fullWidth
+            />
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.right}>نوع المنتج</div>
+          <div className={styles.textBoxContainer}>
+            {" "}
+            <TextField
+              value={state.product}
+              name="product"
+              error={errors.includes("product")}
+              onChange={handleChange}
               fullWidth
             />
           </div>
@@ -143,13 +225,27 @@ const AddOrder = ({ showOrder, setSelectedOrderId }) => {
           <div className={styles.textBoxContainer}>
             {" "}
             <TextField
-              value={state.price}
+              value={state.order_price}
               type="number"
-              name="price"
-              error={errors.includes("price")}
+              name="order_price"
+              error={errors.includes("order_price")}
               helperText="تأكد من إدخال رقم"
               onChange={handleChange}
-              fullWidth
+              placeholder="سعر الطلب"
+              style={{
+                marginLeft: "1rem",
+              }}
+            />
+            +
+            <TextField
+              value={state.shipment_price}
+              type="number"
+              name="shipment_price"
+              placeholder="سعر الشحن"
+              error={errors.includes("shipment_price")}
+              helperText="تأكد من إدخال رقم"
+              onChange={handleChange}
+              className="shipment-price"
             />
           </div>
         </div>

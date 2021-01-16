@@ -5,7 +5,32 @@ import UserContext from "../Contexts/User/UserContext";
 import { TextField, Button } from "@material-ui/core";
 import styles from "../styles/order.module.css";
 import Loader from "../components/Loader";
-
+import Slider from "@material-ui/core/Slider";
+const marks = [
+  {
+    value: 0,
+    label: "قيد المعالجة",
+  },
+  {
+    value: 25,
+    label: "جاهز للشحن",
+  },
+  {
+    value: 50,
+    label: "تم التسليم للشحن",
+  },
+  {
+    value: 75,
+    label: "جاري توزيع الشحنة",
+  },
+  {
+    value: 100,
+    label: "تم التسليم",
+  },
+];
+const valueLabelFormat = (value) => {
+  return value;
+};
 const track = () => {
   const {
     userState: { isLoggedIn },
@@ -37,7 +62,7 @@ const track = () => {
     loadOrder({ variables: { trackID: parseInt(id) } });
   };
 
-  let formedID, createdAt, updatedAt;
+  let formedID, createdAt, updatedAt, sliderDefault;
   const order = data?.getOrder;
   if (order) {
     formedID = `${order.trackID}`;
@@ -59,26 +84,27 @@ const track = () => {
     updatedAt = new Date(parseInt(order.updated_at))
       .toString()
       .replace("GMT+0200 (Eastern European Standard Time)", "");
+    sliderDefault =
+      order.status === "جاهز للشحن"
+        ? 25
+        : order.status === "تم التسليم للشحن"
+        ? 50
+        : order.status === "جاري توزيع الشحنة"
+        ? 75
+        : order.status === "تم التسليم"
+        ? 100
+        : 0;
   }
   return (
-    <div
-      style={{
-        width: "90%",
-
-        margin: "2rem auto",
-      }}
-    >
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+    <div className="track-page">
+      <div className="track-page-back"></div>
+      <div className="track-page-back-logo"></div>
+      <form onSubmit={handleSubmit} className="track-form">
         <TextField
           value={trackId}
           onChange={(e) => setTrackId(e.target.value)}
           variant="filled"
+          className="text-field"
           label="Track ID"
           style={{
             margin: "1rem 0",
@@ -125,70 +151,80 @@ const track = () => {
       )}
 
       {order && (
-        <div className={styles.orderContainer}>
-          <div className={styles.row}>
+        <div className="track-container">
+          <div className="track-row">
             <div className={styles.right}>رقم الطلب</div>
             <div>{order.trackID ? formedID : ""}</div>
           </div>
-
-          {order.customer && (
+          <div className="track-row">
+            <div className={styles.right}>الأسم</div>
+            <div>{order.customer.name}</div>
+          </div>
+          {isLoggedIn && (
             <>
-              <div className={styles.row}>
-                <div className={styles.right}>الأسم</div>
-                <div>{order.customer.name}</div>
-              </div>
-              <div className={styles.row}>
+              <div className="track-row">
                 <div className={styles.right}>رقم الهاتف</div>
                 <div>{order.customer.phone}</div>
               </div>
-              <div className={styles.row}>
+              <div className="track-row">
                 <div className={styles.right}>العنوان</div>
                 <div>{order.customer.address}</div>
               </div>
             </>
           )}
 
-          <div className={styles.row}>
+          <div className="track-row">
             <div className={styles.right}>تفاصيل الطلب</div>
             <div>{order.details}</div>
           </div>
-          <div className={styles.row}>
+          <div className="track-row">
             <div className={styles.right}>ملاحظات</div>
             <div>{order.notes}</div>
           </div>
-          <div className={styles.row}>
+          <div className="track-row">
             <div className={styles.right}>السعر</div>
-            <div>{`$${order.price}`}</div>
-          </div>
-          <div className={styles.row}>
-            <div className={styles.right}>حالة الشحن</div>
-            <div
-              style={{
-                margin: "1rem",
-              }}
-            >
-              <span
-                className={order.shipped ? "tag processed" : "tag processing"}
-              >
-                {" "}
-                {order.shipped ? "تم الشحن" : "قيد المعالجة"}
-              </span>
+            <div dir="ltr">
+              {`${order.price.order} EGP + ${
+                order.price.shipment || "0"
+              } EGP = ${order.price.order + order.price.shipment} EGP`}
             </div>
           </div>
-          <div className={styles.row}>
+
+          <div className="track-row">
             <div className={styles.right}>حالة الطلب</div>
             <div
               style={{
                 margin: "1rem",
               }}
             >
-              <span className={order.finished ? "tag finished" : "tag waiting"}>
+              <span
+                className={
+                  order.status === "تم التسليم"
+                    ? "tag finished"
+                    : order.status === "جاري توزيع الشحنة"
+                    ? "tag waiting"
+                    : order.status === "جاهز للشحن"
+                    ? "tag processed"
+                    : order.status === "تم التسليم للشحن"
+                    ? "tag delievered"
+                    : "tag processing"
+                }
+              >
                 {" "}
-                {order.finished ? "تم التسليم" : "في انتظار التسليم"}
+                {order.status}
               </span>
             </div>
           </div>
-          <div className={styles.row}>
+          <Slider
+            value={sliderDefault}
+            valueLabelFormat={valueLabelFormat}
+            disabled
+            step={null}
+            valueLabelDisplay="auto"
+            marks={marks}
+            className="order-slider"
+          />
+          <div className="track-row">
             <div className={styles.right}>فعّال</div>
             <div
               style={{
@@ -205,21 +241,21 @@ const track = () => {
           </div>
           {isLoggedIn && (
             <>
-              <div className={styles.row}>
+              <div className="track-row">
                 <div className={styles.right}>مُسَّجِل الطلب</div>
                 <div>{order.created_by}</div>
               </div>
-              <div className={styles.row}>
+              <div className="track-row">
                 <div className={styles.right}>تاريخ التسجيل</div>
                 <div style={{ direction: "ltr" }}>{createdAt}</div>
               </div>
-              <div className={styles.row}>
+              <div className="track-row">
                 <div className={styles.right}>مُعَّدِل الطلب</div>
                 <div>
                   {order.updated_by ? order.updated_by : "لم يتم التعديل"}
                 </div>
               </div>
-              <div className={styles.row}>
+              <div className="track-row">
                 <div className={styles.right}>تاريخ التعديل</div>
                 <div style={{ direction: "ltr" }}>
                   {order.updated_by ? updatedAt : ""}

@@ -1,48 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useQuery, useMutation } from "@apollo/react-hooks";
-import ReactToPrint from "react-to-print";
+import React, { useState, useEffect } from "react";
+import { useQuery } from "@apollo/react-hooks";
 import Loader from "./Loader";
-import PostAddIcon from "@material-ui/icons/PostAdd";
-import {
-  LAST_ORDERS,
-  FINISH_ORDERS,
-  UNFINISH_ORDERS,
-  SHIP_ORDERS,
-  UNSHIP_ORDERS,
-  CANCEL_ORDERS,
-  UNCANCEL_ORDERS,
-  DELETE_ORDERS,
-} from "../GraphQL";
-import InputBase from "@material-ui/core/InputBase";
-
+import { LAST_ORDERS } from "../GraphQL";
 import { makeStyles } from "@material-ui/styles";
-import { lighten, fade } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-
 import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import SpellcheckIcon from "@material-ui/icons/Spellcheck";
-import DeleteIcon from "@material-ui/icons/Delete";
-import CachedIcon from "@material-ui/icons/Cached";
-import {
-  AddCircleOutline,
-  RemoveCircleOutline,
-  CheckCircleOutline,
-  HighlightOff,
-  Search,
-} from "@material-ui/icons";
-import { Button } from "@material-ui/core";
-import PrintCards from "./PrintCards";
-import PrintTable from "./PrintTable";
-
+import TableToolBar from "./TableToolBar";
+import { Waypoint } from "react-waypoint";
 const tableHeads = [
   "ID",
   "الأسم",
@@ -51,6 +19,8 @@ const tableHeads = [
   "تفاصيل الطلب",
   "ملاحظات",
   "السعر",
+  "تاريخ",
+  "توصيل",
   "الشحن",
   "الحالة",
   "فعَّال",
@@ -75,96 +45,36 @@ const useStyles = makeStyles((theme) => ({
   tableContainer: {
     width: "95%",
     margin: " 1rem auto",
+    height: "90vh",
+
     overflow: "scroll",
     [theme.breakpoints.down("sm")]: {
       width: "100%",
     },
-
-    toolbar: {
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(1),
-    },
-    highlight:
-      theme.palette.type === "light"
-        ? {
-            color: theme.palette.secondary.main,
-            backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-          }
-        : {
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.secondary.dark,
-          },
-  },
-  title: {
-    marginLeft: "auto",
-    fontFamily: "Cairo",
-    [theme.breakpoints.down(800)]: {
-      marginLeft: "unset",
-      marginBottom: "0.5rem",
-    },
-  },
-  search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(3),
-      width: "auto",
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inputRoot: {
-    color: "inherit",
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
   },
 }));
 
-const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
+const OrdersList = ({ list, showOrder, setOrder, addOrder, delievryType }) => {
   const [orders, setOrders] = useState([]);
   const [selected, setSelected] = useState([]);
+
   const [search, setSearch] = useState("");
-  const { data, error, loading, fetchMore, refetch } = useQuery(LAST_ORDERS, {
-    variables: { limit: 10, category: list === "all" ? "" : list, search },
-  });
-  const [finishOrders] = useMutation(FINISH_ORDERS);
-  const [unfinishOrders] = useMutation(UNFINISH_ORDERS);
-  const [shipOrders] = useMutation(SHIP_ORDERS);
-  const [unshipOrders] = useMutation(UNSHIP_ORDERS);
-  const [cancelOrders] = useMutation(CANCEL_ORDERS);
-  const [uncancelOrders] = useMutation(UNCANCEL_ORDERS);
-  const [deleteOrders] = useMutation(DELETE_ORDERS);
-
+  const { data, error, loading, fetchMore, refetch, networkStatus } = useQuery(
+    LAST_ORDERS,
+    {
+      variables: {
+        limit: 10,
+        category: list === "all" ? "" : list,
+        deliveryType: delievryType ? delievryType : "",
+        search,
+      },
+      notifyOnNetworkStatusChange: true,
+    }
+  );
   const classes = useStyles();
-  const printCards = useRef();
-  const printTable = useRef();
-
   useEffect(() => {
     if (data) setOrders(data.lastOrders);
   }, [data]);
-
   const loadMore = () => {
     fetchMore({
       variables: { cursor: orders[orders.length - 1].id, search },
@@ -198,187 +108,19 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
   };
   const numSelected = selected.length;
   const ordersCount = orders.length;
-  const handleSearch = (e) => {
-    setSearch(e.target.value);
-    refetch();
-  };
-  const handleAction = async (action) => {
-    try {
-      switch (action) {
-        case "finish": {
-          await finishOrders({ variables: { ids: selected } });
-          break;
-        }
-        case "unfinish": {
-          await unfinishOrders({ variables: { ids: selected } });
-          break;
-        }
-        case "ship": {
-          await shipOrders({ variables: { ids: selected } });
-          break;
-        }
-        case "unship": {
-          await unshipOrders({ variables: { ids: selected } });
-          break;
-        }
-        case "activate": {
-          await uncancelOrders({ variables: { ids: selected } });
-          break;
-        }
-        case "cancel": {
-          await cancelOrders({ variables: { ids: selected } });
-          break;
-        }
-        case "delete": {
-          await deleteOrders({ variables: { ids: selected } });
-          break;
-        }
-      }
-      setSelected([]);
-      refetch();
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   if (!data) return <Loader />;
   return (
     <div>
-      <Toolbar className="toolbar-custom">
-        {numSelected > 0 ? (
-          <Typography
-            className={classes.title}
-            color="inherit"
-            variant="subtitle1"
-            component="div"
-          >
-            تم تحديد {numSelected} طلبات
-          </Typography>
-        ) : (
-          <Typography
-            className={classes.title}
-            variant="h6"
-            id="tableTitle"
-            component="div"
-          >
-            الطلبات
-          </Typography>
-        )}
-        <Button
-          color="primary"
-          variant="contained"
-          size="large"
-          className="addOrder"
-          onClick={() => addOrder()}
-          endIcon={<PostAddIcon />}
-        >
-          أضف طلب جديد
-        </Button>
-        <>
-          <Button onClick={() => loadMore()} variant="contained">
-            تحميل المزيد
-          </Button>
-
-          <Button
-            onClick={() => refetch()}
-            variant="contained"
-            style={{ margin: "0.5rem" }}
-          >
-            إعادة التحميل
-          </Button>
-          <ReactToPrint
-            trigger={() => (
-              <Button
-                variant="contained"
-                style={{ margin: "0.5rem" }}
-                color="primary"
-                disabled={numSelected < 1}
-              >
-                طباعة جدول
-              </Button>
-            )}
-            content={() => printTable.current}
-            pageStyle="@page { size: auto;  margin: 1rem;} @media print { body { -webkit-print-color-adjust: exact; } }"
-          />
-          <ReactToPrint
-            trigger={() => (
-              <Button
-                variant="contained"
-                style={{ margin: "0.5rem" }}
-                color="secondary"
-                disabled={numSelected < 1}
-              >
-                طباعة كروت
-              </Button>
-            )}
-            content={() => printCards.current}
-            pageStyle="@page { size: auto;  margin: 1rem;} @media print { body { -webkit-print-color-adjust: exact; } }"
-          />
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <Search />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              onChange={handleSearch}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
-        </>
-        {selected.length > 0 && (
-          <div className="little-icons">
-            <Tooltip title="تم التسليم" onClick={() => handleAction("finish")}>
-              <IconButton>
-                <AddCircleOutline />
-              </IconButton>
-            </Tooltip>
-            <Tooltip
-              title="في انتظار التسليم"
-              onClick={() => handleAction("unfinish")}
-            >
-              <IconButton>
-                <RemoveCircleOutline />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="تم الشحن" onClick={() => handleAction("ship")}>
-              <IconButton>
-                <SpellcheckIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip
-              title="تحت المعالجة"
-              onClick={() => handleAction("unship")}
-            >
-              <IconButton>
-                <CachedIcon />
-              </IconButton>
-            </Tooltip>
-
-            <Tooltip
-              title="تحويل إلى فعَّال"
-              onClick={() => handleAction("activate")}
-            >
-              <IconButton>
-                <CheckCircleOutline />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="إلغاء" onClick={() => handleAction("cancel")}>
-              <IconButton>
-                <HighlightOff />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="حذف" onClick={() => handleAction("delete")}>
-              <IconButton>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-        )}
-      </Toolbar>
+      <TableToolBar
+        numSelected={numSelected}
+        selected={selected}
+        refetch={refetch}
+        setSearch={setSearch}
+        setSelected={setSelected}
+        addOrder={addOrder}
+        orders={orders}
+      />
       <div className={classes.tableContainer} dir="rtl">
         <Table className={classes.table} size="small">
           <TableHead>
@@ -424,13 +166,14 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
                   tabIndex={-1}
                   selected={isItemSelected}
                   style={{
-                    backgroundColor: order.finished
-                      ? "lightgreen"
-                      : order.cancelled
-                      ? "rgb(221, 115, 115)"
-                      : isItemSelected
-                      ? "rgba(245, 0, 87, 0.08)"
-                      : "inherit",
+                    backgroundColor:
+                      order.status === "تم التسليم"
+                        ? "lightgreen"
+                        : order.cancelled
+                        ? "rgb(221, 115, 115)"
+                        : isItemSelected
+                        ? "rgba(245, 0, 87, 0.08)"
+                        : "inherit",
                   }}
                 >
                   <TableCell padding="checkbox">
@@ -456,26 +199,28 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
                   <TableCell align="right">{order.customer.address}</TableCell>
                   <TableCell align="right">{order.details}</TableCell>
                   <TableCell align="right">{order.notes}</TableCell>
-                  <TableCell align="right">{`${order.price}$`}</TableCell>
-
+                  <TableCell align="right">{`${order.price.order}$ + ${
+                    order.price.shipment ? order.price.shipment : "0"
+                  }$ = ${order.price.order + order.price.shipment}`}</TableCell>
                   <TableCell align="right">
-                    <span
-                      className={
-                        order.shipped ? "tag processed" : "tag processing"
-                      }
-                    >
-                      {" "}
-                      {order.shipped ? "تم الشحن" : "قيد المعالجة"}
-                    </span>
+                    {new Date(parseInt(order.created_at)).toLocaleDateString()}
                   </TableCell>
+                  <TableCell align="right">{order.deliveryType}</TableCell>
                   <TableCell align="right">
                     <span
                       className={
-                        order.finished ? "tag finished" : "tag waiting"
+                        order.status === "تم التسليم"
+                          ? "tag finished"
+                          : order.status === "جاري توزيع الشحنة"
+                          ? "tag waiting"
+                          : order.status === "جاهز للشحن"
+                          ? "tag processed"
+                          : order.status === "تم التسليم للشحن"
+                          ? "tag delievered"
+                          : "tag processing"
                       }
                     >
-                      {" "}
-                      {order.finished ? "تم التسليم" : "في انتظار التسليم"}
+                      {order.status}
                     </span>
                   </TableCell>
                   <TableCell align="right">
@@ -503,21 +248,17 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
                     >
                       عرض
                     </button>
+                    {index === orders.length - 1 && (
+                      <Waypoint onEnter={() => loadMore()} />
+                    )}
                   </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
+        {loading ? <h3>Loading...</h3> : null}
       </div>
-      <PrintCards
-        ref={printCards}
-        orders={orders.filter((order) => selected.includes(order.id))}
-      />
-      <PrintTable
-        ref={printTable}
-        orders={orders.filter((order) => selected.includes(order.id))}
-      />
     </div>
   );
 };

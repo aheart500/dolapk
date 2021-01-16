@@ -1,6 +1,8 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import "../styles/global.css";
 import "../styles/app.css";
+
 import ApolloClient, { InMemoryCache } from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
 import UserState from "../Contexts/User/UserState";
