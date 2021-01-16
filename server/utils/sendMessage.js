@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const sendMessage = async (body, receviers) => {
+/* const sendMessage = async (body, receviers) => {
   let recipients = receviers.map((person) => {
     return { msisdn: parseInt(`2${person}`) };
   });
@@ -32,6 +32,6 @@ const sendMessage = async (body, receviers) => {
   } catch (e) {
     console.log(e);
   }
-};
-
+}; */
+const sendMessage = () => {};
 module.exports = sendMessage;

@@ -139,6 +139,56 @@ const Drawer_ = ({
                   </ListItemIcon>
                   <ListItemText primary="Cancelled orders" />
                 </ListItem>
+                <ListItem
+                  button
+                  className={classes.nested}
+                  onClick={() => handleClick("QP")}
+                >
+                  <ListItemIcon>
+                    <PlaylistAddCheckIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="QP" />
+                </ListItem>
+                <ListItem
+                  button
+                  className={classes.nested}
+                  onClick={() => handleClick("Urgent")}
+                >
+                  <ListItemIcon>
+                    <PlaylistAddCheckIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Urgent" />
+                </ListItem>
+                <ListItem
+                  button
+                  className={classes.nested}
+                  onClick={() => handleClick("البراق")}
+                >
+                  <ListItemIcon>
+                    <PlaylistAddCheckIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="البراق" />
+                </ListItem>
+                <ListItem
+                  button
+                  className={classes.nested}
+                  onClick={() => handleClick("مترو")}
+                >
+                  <ListItemIcon>
+                    <PlaylistAddCheckIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="مترو" />
+                </ListItem>
+                <ListItem
+                  button
+                  className={classes.nested}
+                  onClick={() => handleClick("بيت")}
+                >
+                  <ListItemIcon>
+                    <PlaylistAddCheckIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="بيت" />
+                </ListItem>
               </List>
             </Collapse>
             <ListItem button onClick={handleLogout}>

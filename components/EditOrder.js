@@ -2,7 +2,9 @@ import React, { useState, useReducer } from "react";
 import { useMutation } from "@apollo/react-hooks";
 import { EDIT_ORDER } from "../GraphQL";
 import styles from "../styles/order.module.css";
-import { Button, TextField } from "@material-ui/core";
+import { TextField, Button, Select, MenuItem } from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import EgyptianGovernorates from "../EgyptianGovernorates.json";
 const initialState = {
   customer_name: "",
   customer_phone: "",
@@ -11,6 +13,9 @@ const initialState = {
   notes: "",
   order_price: "",
   shipment_price: "",
+  deliveryType: "",
+  governorate: "",
+  product: "",
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -37,6 +42,9 @@ const EditOrder = ({
     notes: editOrder.notes,
     order_price: editOrder.price.order,
     shipment_price: editOrder.price.shipment,
+    deliveryType: editOrder.deliveryType,
+    governorate: editOrder.governorate,
+    product: editOrder.product,
   });
   const [editOrderM, { error, loading }] = useMutation(EDIT_ORDER);
   const [errors, setErrors] = useState([]);
@@ -133,15 +141,67 @@ const EditOrder = ({
           </div>
         </div>
         <div className={styles.row}>
+          <div className={styles.right}>المحافظة</div>
+          <div className={styles.textBoxContainer}>
+            {" "}
+            <Autocomplete
+              options={EgyptianGovernorates}
+              value={state.governorate}
+              onChange={(e, newValue) => {
+                dispatch({
+                  type: "field",
+                  field: "governorate",
+                  value: newValue,
+                });
+              }}
+              renderInput={(params) => (
+                <TextField {...params} variant="outlined" />
+              )}
+            />
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.right}>نوع توصيل</div>
+          <div className={styles.textBoxContainer}>
+            {" "}
+            <Select
+              name="deliveryType"
+              value={state.deliveryType}
+              onChange={handleChange}
+              fullWidth
+            >
+              <MenuItem value="مترو">مترو</MenuItem>
+              <MenuItem value="بيت">بيت</MenuItem>
+              <MenuItem value="QP">QP</MenuItem>
+              <MenuItem value="Urgent">Urgent</MenuItem>
+              <MenuItem value="البراق">البراق</MenuItem>
+            </Select>
+          </div>
+        </div>
+        <div className={styles.row}>
           <div className={styles.right}>العنوان</div>
           <div className={styles.textBoxContainer}>
             {" "}
             <TextField
               value={state.customer_address}
               name="customer_address"
+              error={errors.includes("customer_address")}
               onChange={handleChange}
               multiline
               rows={2}
+              fullWidth
+            />
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.right}>نوع المنتج</div>
+          <div className={styles.textBoxContainer}>
+            {" "}
+            <TextField
+              value={state.product}
+              name="product"
+              error={errors.includes("product")}
+              onChange={handleChange}
               fullWidth
             />
           </div>

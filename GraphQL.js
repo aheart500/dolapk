@@ -22,6 +22,8 @@ const PERSON_DETALIS = gql`
     created_at
     updated_at
     deliveryType
+    governorate
+    product
   }
 `;
 
@@ -33,6 +35,7 @@ export const GET_ORDER = gql`
   }
   ${PERSON_DETALIS}
 `;
+
 export const GET_ORDER_SENSETIVE = gql`
   query order($id: ID, $trackID: Int) {
     getOrder(id: $id, trackID: $trackID) {
@@ -48,7 +51,6 @@ export const GET_ORDER_SENSETIVE = gql`
       status
       cancelled
       trackID
-
     }
   }
 `;
@@ -59,12 +61,14 @@ export const LAST_ORDERS = gql`
     $cursor: ID
     $search: String
     $category: String
+    $deliveryType: String
   ) {
     lastOrders(
       limit: $limit
       cursor: $cursor
       search: $search
       category: $category
+      deliveryType: $deliveryType
     ) {
       ...allFields
     }
@@ -82,6 +86,8 @@ export const ADD_ORDER = gql`
     $order_price: Float!
     $shipment_price: Float
     $deliveryType: String
+    $governorate: String
+    $product: String
   ) {
     addOrder(
       customer_name: $customer_name
@@ -92,6 +98,8 @@ export const ADD_ORDER = gql`
       order_price: $order_price
       shipment_price: $shipment_price
       deliveryType: $deliveryType
+      governorate: $governorate
+      product: $product
     ) {
       id
     }
@@ -109,6 +117,8 @@ export const EDIT_ORDER = gql`
     $order_price: Float!
     $shipment_price: Float
     $deliveryType: String
+    $governorate: String
+    $product: String
   ) {
     editOrder(
       id: $id
@@ -120,6 +130,8 @@ export const EDIT_ORDER = gql`
       order_price: $order_price
       shipment_price: $shipment_price
       deliveryType: $deliveryType
+      governorate: $governorate
+      product: $product
     ) {
       ...allFields
     }
@@ -172,7 +184,7 @@ export const LOGIN = gql`
 export const CREATE_ADMIN = gql`
   mutation createAdmin(
     $username: String!
-    $password: string!
+    $password: String!
     $name: String!
     $img: String
   ) {
@@ -184,6 +196,44 @@ export const CREATE_ADMIN = gql`
     ) {
       name
       username
+    }
+  }
+`;
+export const EDIT_ADMIN = gql`
+  mutation editAdmin(
+    $id: ID!
+    $username: String
+    $password: String
+    $name: String
+    $img: String
+  ) {
+    editAdmin(
+      id: $id
+      username: $username
+      password: $password
+      name: $name
+      img: $img
+    ) {
+      name
+      username
+    }
+  }
+`;
+export const DELETE_ADMIN = gql`
+  mutation deleteAdmin($id: ID!) {
+    deleteAdmin(id: $id) {
+      name
+    }
+  }
+`;
+
+export const GET_ADMINS = gql`
+  query {
+    getAdmins {
+      id
+      name
+      username
+      img
     }
   }
 `;

@@ -79,6 +79,51 @@ const Admin = () => {
             setOrder={setSelectedOrderId}
           />
         );
+      case "QP":
+        return (
+          <OrdersList
+            delievryType="QP"
+            addOrder={() => setTap("order-form-add")}
+            showOrder={() => setTap("order")}
+            setOrder={setSelectedOrderId}
+          />
+        );
+      case "Urgent":
+        return (
+          <OrdersList
+            delievryType="Urgent"
+            addOrder={() => setTap("order-form-add")}
+            showOrder={() => setTap("order")}
+            setOrder={setSelectedOrderId}
+          />
+        );
+      case "البراق":
+        return (
+          <OrdersList
+            delievryType="البراق"
+            addOrder={() => setTap("order-form-add")}
+            showOrder={() => setTap("order")}
+            setOrder={setSelectedOrderId}
+          />
+        );
+      case "مترو":
+        return (
+          <OrdersList
+            delievryType="مترو"
+            addOrder={() => setTap("order-form-add")}
+            showOrder={() => setTap("order")}
+            setOrder={setSelectedOrderId}
+          />
+        );
+      case "بيت":
+        return (
+          <OrdersList
+            delievryType="بيت"
+            addOrder={() => setTap("order-form-add")}
+            showOrder={() => setTap("order")}
+            setOrder={setSelectedOrderId}
+          />
+        );
       case "order-form-add": {
         return (
           <AddOrder

@@ -19,6 +19,8 @@ const OrderSchema = new mongoose.Schema(
     status: { type: String, default: "قيد المعالجة" },
     cancelled: { type: Boolean, default: false },
     deliveryType: String,
+    governorate: String,
+    product: String,
     created_by: String,
     updated_by: String,
   },

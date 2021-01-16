@@ -36,6 +36,8 @@ const typeDefs = gql`
     created_by: String
     updated_by: String
     deliveryType: String
+    governorate: String
+    product: String
   }
   type Mutation {
     createAdmin(
@@ -44,6 +46,14 @@ const typeDefs = gql`
       name: String!
       img: String
     ): Admin
+    editAdmin(
+      id: ID!
+      username: String
+      password: String
+      name: String
+      img: String
+    ): Admin
+    deleteAdmin(id: ID!): Admin
     login(username: String!, password: String!): Token
     addOrder(
       customer_name: String!
@@ -54,6 +64,8 @@ const typeDefs = gql`
       order_price: Float!
       shipment_price: Float
       deliveryType: String
+      governorate: String
+      product: String
     ): Order
     editOrder(
       id: ID!
@@ -65,6 +77,8 @@ const typeDefs = gql`
       order_price: Float!
       shipment_price: Float
       deliveryType: String
+      governorate: String
+      product: String
     ): Order
     updateStatus(
       ids: [ID!]!
@@ -79,11 +93,13 @@ const typeDefs = gql`
 
   type Query {
     allOrders: [Order!]!
+    getAdmins: [Admin!]!
     ordersCount: Int!
     getOrder(id: ID, trackID: Int): Order
     lastOrders(
       limit: Int!
       category: String
+      deliveryType: String
       cursor: ID
       search: String
     ): [Order!]!

@@ -10,19 +10,6 @@ const OrderModel = require("../models/order");
 const AdminModel = require("../models/admin");
 const messages = require("../utils/messages");
 const sendMessage = require("../utils/sendMessage");
-/* const sendMiddleWare = async (token, ids, status) => {
-  
-  if (message) {
-    let orders = await OrderModel.find({ _id: { $in: ids } }).select({
-      trackID: 1,
-      customer: 1,
-    });
-
-    orders.forEach((order) => {
-      sendMessages(token, message(order.trackID), [order.customer.phone]);
-    });
-  }
-}; */
 
 const orArrF = (search) => {
   return [
@@ -36,6 +23,7 @@ const orArrF = (search) => {
 
 const resolvers = {
   Query: {
+    getAdmins: () => AdminModel.find({}).sort("-_id"),
     allOrders: () => OrderModel.find({}).sort("-_id"),
     lastOrders: async (root, args, c) => {
       const search = args.search ? new RegExp(args.search, "ig") : "";
@@ -59,6 +47,9 @@ const resolvers = {
           ? { cancelled: true }
           : {}
         : {};
+      if (args.deliveryType) {
+        query.deliveryType = args.deliveryType;
+      }
       if (args.cursor) {
         query._id = { $lt: args.cursor };
       }
@@ -68,7 +59,7 @@ const resolvers = {
           $or: orArr,
         };
       }
-      return await OrderModel.find(query).limit(args.limit).sort("-_id")
+      return await OrderModel.find(query).limit(args.limit).sort("-_id");
     },
 
     ordersCount: () => OrderModel.estimatedDocumentCount(),
@@ -88,6 +79,18 @@ const resolvers = {
         img: args.img ? args.img : null,
       });
       return admin.save();
+    },
+    editAdmin: async (root, { id, ...args }) => {
+      let newAdmin = args;
+      if (args.password) {
+        newAdmin.password = await bcrypt.hash(args.password, saltRounds);
+      }
+      return await AdminModel.findOneAndUpdate({ _id: id }, newAdmin, {
+        new: true,
+      });
+    },
+    deleteAdmin: async (root, args) => {
+      return AdminModel.findOneAndDelete({ _id: args.id });
     },
     login: async (root, args) => {
       const admin = await AdminModel.findOne({ username: args.username });
@@ -113,6 +116,8 @@ const resolvers = {
         cancelled: false,
         notes: args.notes ? args.notes : null,
         deliveryType: args.deliveryType,
+        governorate: args.governorate,
+        product: args.product,
         customer: {
           name: args.customer_name,
           phone: args.customer_phone,
@@ -136,6 +141,8 @@ const resolvers = {
         {
           notes: args.notes ? args.notes : "",
           deliveryType: args.deliveryType,
+          governorate: args.governorate,
+          product: args.product,
           customer: {
             name: args.customer_name,
             phone: args.customer_phone,

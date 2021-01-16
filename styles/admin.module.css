@@ -1,0 +1,11 @@
+.admins {
+  width: 80%;
+  margin: 2rem auto;
+}
+.admin {
+  margin: 1rem 0;
+}
+.fields {
+  display: flex;
+  align-items: stretch;
+}

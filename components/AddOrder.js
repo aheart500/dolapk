@@ -3,8 +3,8 @@ import { useMutation } from "@apollo/react-hooks";
 import { ADD_ORDER } from "../GraphQL";
 import styles from "../styles/order.module.css";
 import { TextField, Button, Select, MenuItem } from "@material-ui/core";
-import ListSubheader from '@material-ui/core/ListSubheader';
-
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import EgyptianGovernorates from "../EgyptianGovernorates.json";
 const initialState = {
   customer_name: "",
   customer_phone: "",
@@ -13,7 +13,9 @@ const initialState = {
   notes: "",
   order_price: "",
   shipment_price: "",
-  deliveryType: ''
+  deliveryType: "",
+  governorate: "",
+  product: "",
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -41,6 +43,7 @@ const AddOrder = ({ showOrder, setSelectedOrderId }) => {
   const handleChange = (e) => {
     dispatch({ type: "field", field: e.target.name, value: e.target.value });
   };
+  console.log(state);
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
@@ -123,6 +126,44 @@ const AddOrder = ({ showOrder, setSelectedOrderId }) => {
           </div>
         </div>
         <div className={styles.row}>
+          <div className={styles.right}>المحافظة</div>
+          <div className={styles.textBoxContainer}>
+            {" "}
+            <Autocomplete
+              options={EgyptianGovernorates}
+              value={state.governorate}
+              onChange={(e, newValue) => {
+                dispatch({
+                  type: "field",
+                  field: "governorate",
+                  value: newValue,
+                });
+              }}
+              renderInput={(params) => (
+                <TextField {...params} variant="outlined" />
+              )}
+            />
+          </div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.right}>نوع توصيل</div>
+          <div className={styles.textBoxContainer}>
+            {" "}
+            <Select
+              name="deliveryType"
+              value={state.deliveryType}
+              onChange={handleChange}
+              fullWidth
+            >
+              <MenuItem value="مترو">مترو</MenuItem>
+              <MenuItem value="بيت">بيت</MenuItem>
+              <MenuItem value="QP">QP</MenuItem>
+              <MenuItem value="Urgent">Urgent</MenuItem>
+              <MenuItem value="البراق">البراق</MenuItem>
+            </Select>
+          </div>
+        </div>
+        <div className={styles.row}>
           <div className={styles.right}>العنوان</div>
           <div className={styles.textBoxContainer}>
             {" "}
@@ -138,27 +179,18 @@ const AddOrder = ({ showOrder, setSelectedOrderId }) => {
           </div>
         </div>
         <div className={styles.row}>
-          <div className={styles.right}>نوع توصيل</div>
+          <div className={styles.right}>نوع المنتج</div>
           <div className={styles.textBoxContainer}>
             {" "}
-            <Select
-          name="deliveryType"
-          value={state.deliveryType}
-          onChange={handleChange}
-          fullWidth
-        >
-        
-          <MenuItem value='مترو'>مترو</MenuItem>
-          <MenuItem value='بيت'>بيت</MenuItem>
-          <MenuItem value='QP'>QP</MenuItem>
-          <MenuItem value='Urgent'>Urgent</MenuItem>
-          <MenuItem value='البراق'>البراق</MenuItem>
-
-
-        </Select>
-            
+            <TextField
+              value={state.product}
+              name="product"
+              error={errors.includes("product")}
+              onChange={handleChange}
+              fullWidth
+            />
           </div>
-        </div> 
+        </div>
         <div className={styles.row}>
           <div className={styles.right}>تفاصيل الطلب</div>
           <div className={styles.textBoxContainer}>

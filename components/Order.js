@@ -164,8 +164,16 @@ const Order = ({
           <div>{order.deliveryType}</div>
         </div>
         <div className={styles.row}>
+          <div className={styles.right}>المحافظة</div>
+          <div>{order.governorate}</div>
+        </div>
+        <div className={styles.row}>
           <div className={styles.right}>العنوان</div>
           <div>{order.customer.address}</div>
+        </div>
+        <div className={styles.row}>
+          <div className={styles.right}>نوع المنتج</div>
+          <div>{order.product}</div>
         </div>
         <div className={styles.row}>
           <div className={styles.right}>تفاصيل الطلب</div>

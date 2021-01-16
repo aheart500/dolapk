@@ -19,6 +19,8 @@ const tableHeads = [
   "تفاصيل الطلب",
   "ملاحظات",
   "السعر",
+  "تاريخ",
+  "توصيل",
   "الشحن",
   "الحالة",
   "فعَّال",
@@ -52,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
+const OrdersList = ({ list, showOrder, setOrder, addOrder, delievryType }) => {
   const [orders, setOrders] = useState([]);
   const [selected, setSelected] = useState([]);
 
@@ -60,7 +62,12 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
   const { data, error, loading, fetchMore, refetch, networkStatus } = useQuery(
     LAST_ORDERS,
     {
-      variables: { limit: 10, category: list === "all" ? "" : list, search },
+      variables: {
+        limit: 10,
+        category: list === "all" ? "" : list,
+        deliveryType: delievryType ? delievryType : "",
+        search,
+      },
       notifyOnNetworkStatusChange: true,
     }
   );
@@ -195,7 +202,10 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder }) => {
                   <TableCell align="right">{`${order.price.order}$ + ${
                     order.price.shipment ? order.price.shipment : "0"
                   }$ = ${order.price.order + order.price.shipment}`}</TableCell>
-
+                  <TableCell align="right">
+                    {new Date(parseInt(order.created_at)).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell align="right">{order.deliveryType}</TableCell>
                   <TableCell align="right">
                     <span
                       className={

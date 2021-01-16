@@ -5,7 +5,32 @@ import UserContext from "../Contexts/User/UserContext";
 import { TextField, Button } from "@material-ui/core";
 import styles from "../styles/order.module.css";
 import Loader from "../components/Loader";
-
+import Slider from "@material-ui/core/Slider";
+const marks = [
+  {
+    value: 0,
+    label: "قيد المعالجة",
+  },
+  {
+    value: 25,
+    label: "جاهز للشحن",
+  },
+  {
+    value: 50,
+    label: "تم التسليم للشحن",
+  },
+  {
+    value: 75,
+    label: "جاري توزيع الشحنة",
+  },
+  {
+    value: 100,
+    label: "تم التسليم",
+  },
+];
+const valueLabelFormat = (value) => {
+  return value;
+};
 const track = () => {
   const {
     userState: { isLoggedIn },
@@ -37,7 +62,7 @@ const track = () => {
     loadOrder({ variables: { trackID: parseInt(id) } });
   };
 
-  let formedID, createdAt, updatedAt;
+  let formedID, createdAt, updatedAt, sliderDefault;
   const order = data?.getOrder;
   if (order) {
     formedID = `${order.trackID}`;
@@ -59,26 +84,27 @@ const track = () => {
     updatedAt = new Date(parseInt(order.updated_at))
       .toString()
       .replace("GMT+0200 (Eastern European Standard Time)", "");
+    sliderDefault =
+      order.status === "جاهز للشحن"
+        ? 25
+        : order.status === "تم التسليم للشحن"
+        ? 50
+        : order.status === "جاري توزيع الشحنة"
+        ? 75
+        : order.status === "تم التسليم"
+        ? 100
+        : 0;
   }
   return (
-    <div
-      style={{
-        width: "90%",
-
-        margin: "2rem auto",
-      }}
-    >
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+    <div className="track-page">
+      <div className="track-page-back"></div>
+      <div className="track-page-back-logo"></div>
+      <form onSubmit={handleSubmit} className="track-form">
         <TextField
           value={trackId}
           onChange={(e) => setTrackId(e.target.value)}
           variant="filled"
+          className="text-field"
           label="Track ID"
           style={{
             margin: "1rem 0",
@@ -189,6 +215,15 @@ const track = () => {
               </span>
             </div>
           </div>
+          <Slider
+            value={sliderDefault}
+            valueLabelFormat={valueLabelFormat}
+            disabled
+            step={null}
+            valueLabelDisplay="auto"
+            marks={marks}
+            className="order-slider"
+          />
           <div className="track-row">
             <div className={styles.right}>فعّال</div>
             <div
