@@ -71,7 +71,7 @@ export default function Home() {
               </Link>
             </div>
             <div style={{ width: "100%" }}>
-              <a className="link" href="whatsapp://send?abid=+201004717429">
+              <a className="link" href="https://wa.me/201004717429">
                 <div className="icon fourth-icon"></div>
                 <div className="data">
                   <p className="header-p">Whatsapp</p>
