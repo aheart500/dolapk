@@ -28,7 +28,7 @@ class PrintCards extends Component {
           formedID = `DP${formedID}`;
           const address = order.customer.address;
           return (
-            <div key={i} className="card">
+            <div key={i} className="print-card">
               <div>
                 <div className="card-header">
                   <div
@@ -37,7 +37,7 @@ class PrintCards extends Component {
                       flexDirection: "column",
                     }}
                   >
-                    <h1 className="logo">DOLAPK</h1>
+                    <h1 className="card-logo">DOLAPK</h1>
                     <p className="my-link">www.dolapk.com</p>
                   </div>
                   <img src={QR} className="qr-code" />

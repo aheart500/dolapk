@@ -115,7 +115,7 @@ body {
   page-break-inside: avoid;
   width: 100% !important;
 }
-.logo {
+.card-logo {
   font-family: "Cinzel Decorative", cursive;
   line-height: 0.8;
 }
@@ -123,9 +123,9 @@ body {
   text-align: center;
   font-size: 0.8rem;
 }
-.card {
-  width: 435px;
-  height: 315px;
+.print-card {
+  width: 540px;
+  height: 350px;
   display: flex;
   flex-direction: column;
   border-radius: 10px;
