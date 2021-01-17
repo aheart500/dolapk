@@ -213,7 +213,7 @@ class PrintCards extends Component {
                 <div
                   style={{
                     padding: "0 5px",
-                    height: "25px",
+
                     overflow: "hidden",
                   }}
                 >
@@ -246,13 +246,7 @@ class PrintCards extends Component {
                     marginLeft: "0.2rem",
                   }}
                 />
-                <p
-                  style={{
-                    fontSize: "0.3rem",
-                  }}
-                >
-                  في حالة عدم استلام الأوردر يتم دفع مصاريف الشحن فقط
-                </p>
+                <p>في حالة عدم استلام الأوردر يتم دفع مصاريف الشحن فقط</p>
                 <p
                   className="my-link"
                   style={{
@@ -276,13 +270,7 @@ class PrintCards extends Component {
                     marginLeft: "0.2rem",
                   }}
                 />
-                <p
-                  style={{
-                    fontSize: "0.3rem",
-                  }}
-                >
-                  في حالة الشكاوي والمقترحات :01004717429 - 01097223141{" "}
-                </p>
+                <p>في حالة الشكاوي والمقترحات :01004717429 - 01097223141 </p>
               </div>
             </div>
           );

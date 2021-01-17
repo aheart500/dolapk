@@ -125,11 +125,10 @@ body {
 }
 .print-card {
   width: 540px;
-  height: 350px;
+  height: 391px;
   display: flex;
   flex-direction: column;
   border-radius: 10px;
-  font-size: 0.7rem;
   margin: 2px !important;
   padding: 10px;
   /*   background-image: url("/splash.jpg");
