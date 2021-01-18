@@ -131,10 +131,7 @@ body {
   border-radius: 10px;
   margin: 2px !important;
   padding: 10px;
-  /*   background-image: url("/splash.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 80%; */
+
   float: right;
   page-break-inside: avoid;
 }
@@ -145,8 +142,8 @@ body {
   align-items: center;
 }
 .qr-code {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border: 1px solid;
 
   margin-bottom: 5px;

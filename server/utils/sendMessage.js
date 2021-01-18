@@ -1,37 +1,60 @@
 const axios = require("axios");
 
-/* const sendMessage = async (body, receviers) => {
-  let recipients = receviers.map((person) => {
-    return { msisdn: parseInt(`2${person}`) };
-  });
-  const payload = {
-    sender: "Dolapk",
-    message: body,
-    recipients,
-  };
-  const apiToken = process.env.GATEWAY_TOKEN;
-
-  const encodedAuth = Buffer.from(`${apiToken}:`).toString("base64");
+const sendMessage = async () => {};
+/* const SENDER_NUMBER = "201283300793";
+const ORANGE_TOKEN_URI = "https://api.orange.com/oauth/v2/token";
+const ORANGE_SEND_URI =
+  "https://api.orange.com/smsmessaging/v1/outbound/tel%3A%2B" +
+  SENDER_NUMBER +
+  "/requests";
+const CURRENT_TOKEN = process.env.CURRENT_TOKEN;
+const getOrangeToken = async () => {
   try {
     const resp = await axios.post(
-      "https://gatewayapi.com/rest/mtsms",
-      JSON.stringify(payload),
+      ORANGE_TOKEN_URI,
+      "grant_type=client_credentials",
       {
         headers: {
-          Authorization: `Basic ${encodedAuth}`,
-          "Content-Type": "application/json",
+          Authorization: process.env.ORANGE_AUTH,
         },
       }
     );
-    console.log(resp.json());
-    if (resp.ok) {
-      console.log("congrats! messages are on their way!");
-    } else {
-      console.log("oh-no! something went wrong...");
-    }
+    return resp.data;
   } catch (e) {
     console.log(e);
+    return null;
+  }
+};
+const sendMessage = async (body, receivers) => {
+  if (!receivers) return;
+  const sendToNumber = `2${receivers[0]}`;
+  const requestBody = {
+    outboundSMSMessageRequest: {
+      address: `tel:+${sendToNumber}`,
+      senderAddress: `tel:+${SENDER_NUMBER}`,
+      senderName: "Dolapk",
+      outboundSMSTextMessage: {
+        message: body,
+      },
+    },
+  };
+
+  try {
+    await axios.post(ORANGE_SEND_URI, requestBody, {
+      headers: {
+        Authorization: process.env.CURRENT_TOKEN,
+      },
+    });
+  } catch (e) {
+    try {
+      console.log(e);
+      console.log(e.response && e.response.data);
+      console.log(
+        e.response && e.response.data && e.response.data.requestError
+      );
+    } catch (e) {
+      return;
+    }
   }
 }; */
-const sendMessage = () => {};
 module.exports = sendMessage;

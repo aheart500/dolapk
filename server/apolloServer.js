@@ -2,9 +2,8 @@ const { ApolloServer } = require("apollo-server-express");
 const typeDefs = require("./Graph/typeDefs");
 const resolvers = require("./Graph/resolvers");
 const jwt = require("jsonwebtoken");
-
+const axios = require("axios");
 const SECRET = process.env.SECRET;
-
 const AdminModel = require("./models/admin");
 
 const server = new ApolloServer({

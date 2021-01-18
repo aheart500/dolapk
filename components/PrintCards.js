@@ -1,6 +1,5 @@
 import { Component } from "react";
 import Container from "@material-ui/core/Container";
-import { Grid } from "@material-ui/core";
 import QR from "../public/qr.png";
 import ReportProblemOutlinedIcon from "@material-ui/icons/ReportProblemOutlined";
 import PhoneInTalkOutlinedIcon from "@material-ui/icons/PhoneInTalkOutlined";
@@ -32,7 +31,7 @@ class PrintCards extends Component {
               <div>
                 <div className="card-header">
                   <div
-                    className={{
+                    style={{
                       display: "flex",
                       flexDirection: "column",
                     }}
@@ -123,13 +122,7 @@ class PrintCards extends Component {
                         padding: "0 5px",
                       }}
                     >
-                      <p
-                        style={{
-                          fontSize: "0.5rem",
-                        }}
-                      >
-                        معاد التسليم
-                      </p>
+                      <p>معاد التسليم</p>
                       <p></p>
                     </div>
                   </div>

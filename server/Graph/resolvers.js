@@ -192,7 +192,9 @@ const resolvers = {
         { cancelled: true }
       );
       if (args.phones) {
-        sendMessage(messages.cancelled(), args.phones);
+        args.phones.forEach((phone) => {
+          sendMessage(messages.cancelled(), [phone]);
+        });
       }
       return `Cancelled ${args.ids.length} orders successfully`;
     },
