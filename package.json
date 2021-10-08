@@ -15,7 +15,7 @@
     "@material-ui/styles": "^4.10.0",
     "apollo-boost": "^0.4.9",
     "apollo-server-express": "^2.15.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "bcrypt": "^5.0.0",
     "clsx": "^1.1.1",
     "cors": "^2.8.5",
