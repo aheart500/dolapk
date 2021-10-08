@@ -79,7 +79,12 @@ class PrintCards extends Component {
                     }}
                   >
                     <p>اسم العميل : {order.customer.name} </p>
-                    <p>رقم التليفون : {order.customer.phone} </p>
+                    <p>
+                      رقم التليفون :{" "}
+                      <span style={{ fontFamily: "'Tajawal', sans-serif" }}>
+                        {order.customer.phone}
+                      </span>{" "}
+                    </p>
                     <p>
                       عنوان :{" "}
                       <span

@@ -18,6 +18,7 @@ const tableHeads = [
   "العنوان",
   "تفاصيل الطلب",
   "ملاحظات",
+  "المسجل",
   "السعر",
   "تاريخ",
   "توصيل",
@@ -199,6 +200,7 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder, delievryType }) => {
                   <TableCell align="right">{order.customer.address}</TableCell>
                   <TableCell align="right">{order.details}</TableCell>
                   <TableCell align="right">{order.notes}</TableCell>
+                  <TableCell align="center">{order.created_by}</TableCell>
                   <TableCell align="right">{`${order.price.order}$ + ${
                     order.price.shipment ? order.price.shipment : "0"
                   }$ = ${order.price.order + order.price.shipment}`}</TableCell>

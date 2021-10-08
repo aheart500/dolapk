@@ -9,6 +9,16 @@ export default class MyDocument extends Document {
       <Html>
         <Head>
           <meta name="theme-color" content={theme.palette.primary.main} />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossOrigin="true"
+          />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Cairo&family=Cinzel+Decorative&family=Tajawal&display=swap"
+            rel="stylesheet"
+          ></link>
         </Head>
         <body>
           <Main />
