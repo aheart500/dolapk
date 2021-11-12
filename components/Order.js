@@ -15,11 +15,11 @@ import { Button } from "@material-ui/core";
 const marks = [
   {
     value: 0,
-    label: "قيد المعالجة",
+    label: "أوردر جديد",
   },
   {
     value: 25,
-    label: "جاهز للشحن",
+    label: "تم التأكيد هاتفياً",
   },
   {
     value: 50,
@@ -119,7 +119,7 @@ const Order = ({
       .toString()
       .replace("GMT+0200 (Eastern European Standard Time)", "");
     const sliderDefault =
-      order.status === "جاهز للشحن"
+      order.status === "تم التأكيد هاتفياً"
         ? 25
         : order.status === "تم التسليم للشحن"
         ? 50
@@ -203,7 +203,7 @@ const Order = ({
                   ? "tag finished"
                   : order.status === "جاري توزيع الشحنة"
                   ? "tag waiting"
-                  : order.status === "جاهز للشحن"
+                  : order.status === "تم التأكيد هاتفياً"
                   ? "tag processed"
                   : order.status === "تم التسليم للشحن"
                   ? "tag delievered"

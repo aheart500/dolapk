@@ -245,16 +245,16 @@ const TableToolBar = ({
         {selected.length > 0 && (
           <div className="little-icons">
             <Tooltip
-              title="قيد المعالجة"
-              onClick={() => handleAction("updataStatus", "قيد المعالجة")}
+              title="أوردر جديد"
+              onClick={() => handleAction("updataStatus", "أوردر جديد")}
             >
               <IconButton>
                 <RemoveCircleOutline />
               </IconButton>
             </Tooltip>
             <Tooltip
-              title="جاهز للشحن"
-              onClick={() => handleAction("updataStatus", "جاهز للشحن")}
+              title="تم التأكيد هاتفياً"
+              onClick={() => handleAction("updataStatus", "تم التأكيد هاتفياً")}
             >
               <IconButton>
                 <AddCircleOutline />

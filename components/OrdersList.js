@@ -215,7 +215,7 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder, delievryType }) => {
                           ? "tag finished"
                           : order.status === "جاري توزيع الشحنة"
                           ? "tag waiting"
-                          : order.status === "جاهز للشحن"
+                          : order.status === "تم التأكيد هاتفياً"
                           ? "tag processed"
                           : order.status === "تم التسليم للشحن"
                           ? "tag delievered"
