@@ -127,7 +127,9 @@ class PrintCards extends Component {
                         padding: "0 5px",
                       }}
                     >
-                      <p>معاد التسليم</p>
+                      <p   style={{
+                        fontSize: '0.7rem'
+                      }}>السماح بفتح الشحنة</p>
                       <p></p>
                     </div>
                   </div>

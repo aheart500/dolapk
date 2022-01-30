@@ -47,7 +47,7 @@ export default function Login() {
     } else {
       setPageLoading(false);
     }
-  }, []);
+  }, [userState.isLoggedIn]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

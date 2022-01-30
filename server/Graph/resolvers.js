@@ -24,6 +24,7 @@ const orArrF = (search) => {
 const resolvers = {
   Query: {
     getAdmins: () => AdminModel.find({}).sort("-_id"),
+  
     allOrders: () => OrderModel.find({}).sort("-_id"),
     lastOrders: async (root, args, c) => {
       const search = args.search ? new RegExp(args.search, "ig") : "";
@@ -80,6 +81,9 @@ const resolvers = {
       });
       return admin.save();
     },
+    isCurrentlyAdmin:async (_, args)=> {
+      return await AdminModel.findById(args.id)? true : false
+    },
     editAdmin: async (root, { id, ...args }) => {
       let newAdmin = args;
       if (args.password) {
@@ -106,6 +110,7 @@ const resolvers = {
       return {
         value: jwt.sign(adminForToken, SECRET),
         name: admin.name,
+        id: admin._id,
         img: admin.img ? admin.img : null,
       };
     },

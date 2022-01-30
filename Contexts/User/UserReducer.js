@@ -7,10 +7,11 @@ export default function userReducer(state, action) {
         name: action.name,
         token: action.token,
         img: action.img,
+        id: action.id
       };
 
     case "LOGOUT":
-      return { ...state, isLoggedIn: false, name: "", token: "", img: "" };
+      return { ...state, isLoggedIn: false, name: "", token: "", img: "", id: '' };
 
     default:
       return state;

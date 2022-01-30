@@ -26,7 +26,12 @@ const PERSON_DETALIS = gql`
     product
   }
 `;
+export const IS_CURRENTLY_ADMIN = gql`
+  mutation isCurrentlyAdmin($id: ID!){
+    isCurrentlyAdmin(id:$id)
+  }
 
+`;
 export const GET_ORDER = gql`
   query order($id: ID, $trackID: Int) {
     getOrder(id: $id, trackID: $trackID) {
@@ -178,6 +183,7 @@ export const LOGIN = gql`
       value
       name
       img
+      id
     }
   }
 `;
