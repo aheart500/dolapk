@@ -36,10 +36,8 @@ class PrintCards extends Component {
                       flexDirection: "column",
                     }}
                   >
-                    <h1 className="card-logo">DOLAPK</h1>
-                    <p className="my-link">www.dolapk.com</p>
+                    <h1 className="card-logo">King Pro</h1>
                   </div>
-                  <img src={QR} className="qr-code" />
                 </div>
               </div>
               <div
@@ -127,9 +125,13 @@ class PrintCards extends Component {
                         padding: "0 5px",
                       }}
                     >
-                      <p   style={{
-                        fontSize: '0.7rem'
-                      }}>السماح بفتح الشحنة</p>
+                      <p
+                        style={{
+                          fontSize: "0.7rem",
+                        }}
+                      >
+                        السماح بفتح الشحنة
+                      </p>
                       <p></p>
                     </div>
                   </div>
