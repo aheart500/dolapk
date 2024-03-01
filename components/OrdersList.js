@@ -72,6 +72,7 @@ const OrdersList = ({ list, showOrder, setOrder, addOrder, delievryType }) => {
       notifyOnNetworkStatusChange: true,
     }
   );
+  console.log(error)
   const classes = useStyles();
   useEffect(() => {
     if (data) setOrders(data.lastOrders);

@@ -281,17 +281,7 @@ const Order = ({
           >
             تعديل الطلب
           </Button>
-          <Button
-            onClick={() => {
-              setSelectedOrderId("");
-              deleteOrder().catch((e) => console.log(e));
-              backToList();
-            }}
-            variant="contained"
-            color="secondary"
-          >
-            حذف الطلب
-          </Button>
+        
         </div>
       </div>
     );

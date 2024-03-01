@@ -299,11 +299,7 @@ const TableToolBar = ({
                 <HighlightOff />
               </IconButton>
             </Tooltip>
-            <Tooltip title="حذف" onClick={() => handleAction("delete")}>
-              <IconButton>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
+            
           </div>
         )}
       </Toolbar>
