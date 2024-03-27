@@ -21,7 +21,7 @@ const AdminMain = () => {
   const [admins, setAdmins] = useState([]);
   const [createAdmin] = useMutation(CREATE_ADMIN, { variables: newAdmin });
   const [deleteAdmin] = useMutation(DELETE_ADMIN);
-
+  console.log('HERE')
   useEffect(() => {
     if (isAdmin) {
       loadAdmins();
