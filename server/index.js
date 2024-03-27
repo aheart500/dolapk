@@ -31,7 +31,7 @@ app.all("*", (req, res) => {
 });
 NextApp.prepare().then(() => {
   const server = createServer(app);
-  server.listen(PORT, (err) => {
+  server.listen((err) => {
     if (err) throw err;
     console.log("Server is listening on " + PORT);
     console.log("GraphQL is listening on " + ApolloServer.graphqlPath);
