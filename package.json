@@ -35,7 +35,8 @@
     "react-to-print": "^2.9.0",
     "react-waypoint": "^9.0.3",
     "socket.io": "^2.3.0",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^2.3.0",
+    "webpack": "^5.91.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.13"
