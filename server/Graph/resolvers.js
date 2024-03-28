@@ -1,6 +1,6 @@
 const { GraphQLError } = require("graphql");
 
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const saltRounds = 11;
 const SECRET = process.env.SECRET;
 const jwt = require("jsonwebtoken");
@@ -100,13 +100,13 @@ const resolvers = {
       if (!admin || !(await bcrypt.compare(args.password, admin.password))) {
         throw new GraphQLError("Wrong Credentials");
       }
-      console.log("adminForToken");
+
       const adminForToken = {
         name: admin.name,
         username: admin.username,
         id: admin._id,
       };
-      console.log("adminForToken");
+
       return {
         value: jwt.sign(adminForToken, SECRET),
         name: admin.name,
