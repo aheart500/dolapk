@@ -5,7 +5,7 @@ const app = express();
 const dev = process.env.NODE_ENV !== "production";
 const NextApp = next({ dev });
 const handle = NextApp.getRequestHandler();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 const cors = require("cors");
 const ApolloServer = require("./apolloServer");
 const mongoose = require("mongoose");
@@ -31,7 +31,7 @@ app.all("*", (req, res) => {
 });
 NextApp.prepare().then(() => {
   const server = createServer(app);
-  server.listen((err) => {
+  server.listen(PORT, (err) => {
     if (err) throw err;
     console.log("Server is listening on " + PORT);
     console.log("GraphQL is listening on " + ApolloServer.graphqlPath);
