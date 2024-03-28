@@ -1,7 +1,5 @@
-const {
-  UserInputError,
-  AuthenticationError,
-} = require("apollo-server-express");
+const { GraphQLError } = require("graphql");
+
 const bcrypt = require("bcrypt");
 const saltRounds = 11;
 const SECRET = process.env.SECRET;
@@ -24,7 +22,7 @@ const orArrF = (search) => {
 const resolvers = {
   Query: {
     getAdmins: () => AdminModel.find({}).sort("-_id"),
-  
+
     allOrders: () => OrderModel.find({}).sort("-_id"),
     lastOrders: async (root, args, c) => {
       const search = args.search ? new RegExp(args.search, "ig") : "";
@@ -81,8 +79,8 @@ const resolvers = {
       });
       return admin.save();
     },
-    isCurrentlyAdmin:async (_, args)=> {
-      return await AdminModel.findById(args.id)? true : false
+    isCurrentlyAdmin: async (_, args) => {
+      return (await AdminModel.findById(args.id)) ? true : false;
     },
     editAdmin: async (root, { id, ...args }) => {
       let newAdmin = args;
@@ -98,15 +96,17 @@ const resolvers = {
     },
     login: async (root, args) => {
       const admin = await AdminModel.findOne({ username: args.username });
-      if (!admin || !(await bcrypt.compare(args.password, admin.password)))
-        throw new UserInputError("Wrong credentials", {
-          invalidArgs: args,
-        });
+
+      if (!admin || !(await bcrypt.compare(args.password, admin.password))) {
+        throw new GraphQLError("Wrong Credentials");
+      }
+      console.log("adminForToken");
       const adminForToken = {
         name: admin.name,
         username: admin.username,
         id: admin._id,
       };
+      console.log("adminForToken");
       return {
         value: jwt.sign(adminForToken, SECRET),
         name: admin.name,
@@ -115,7 +115,7 @@ const resolvers = {
       };
     },
     addOrder: async (root, args, c) => {
-      if (!c.currentAdmin) throw new AuthenticationError("Not Authinticated");
+      if (!c.currentAdmin) throw new GraphQLError("Not Authinticated");
       let newOrder = new OrderModel({
         id: Math.floor(Math.random() * 100),
         cancelled: false,
@@ -140,7 +140,7 @@ const resolvers = {
       return newOrder;
     },
     editOrder: async (root, args, c) => {
-      if (!c.currentAdmin) throw new AuthenticationError("Not Authinticated");
+      if (!c.currentAdmin) throw new GraphQLError("Not Authinticated");
       const order = await OrderModel.findByIdAndUpdate(
         args.id,
         {

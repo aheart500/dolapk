@@ -1,4 +1,4 @@
-const { ApolloServer } = require("apollo-server-express");
+const { ApolloServer } = require("@apollo/server");
 const typeDefs = require("./Graph/typeDefs");
 const resolvers = require("./Graph/resolvers");
 const jwt = require("jsonwebtoken");

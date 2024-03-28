@@ -12,7 +12,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "../styles/theme";
 
 const App = ({ Component, pageProps }) => {
-  const link = "/graphql";
+  const link = "/api/graphql";
   const [token, setToken] = useState(null);
   const client = new ApolloClient({
     cache: new InMemoryCache(),

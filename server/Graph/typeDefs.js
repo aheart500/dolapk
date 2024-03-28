@@ -90,12 +90,12 @@ const typeDefs = gql`
     cancelOrders(ids: [ID!]!, phones: [String!], trackIds: [Int!]): String
     unCancelOrders(ids: [ID!]!): String
     deleteOrders(ids: [ID!]!): String
-    isCurrentlyAdmin(id:ID!): Boolean
+    isCurrentlyAdmin(id: ID!): Boolean
   }
 
   type Query {
     allOrders: [Order!]!
- 
+
     getAdmins: [Admin!]!
     ordersCount: Int!
     getOrder(id: ID, trackID: Int): Order

@@ -8,17 +8,6 @@ const handle = NextApp.getRequestHandler();
 const PORT = process.env.PORT || 3000;
 const cors = require("cors");
 const ApolloServer = require("./apolloServer");
-const mongoose = require("mongoose");
-
-mongoose
-  .connect(process.env.MongoDB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-  })
-  .then(() => console.log("MongoDB connected successfully"))
-  .catch((err) => console.log(err));
 
 app.use(cors());
 
